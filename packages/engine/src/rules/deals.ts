@@ -1,4 +1,4 @@
-import type { BehaviorId, DispositionId } from "../types";
+import type { BehaviorId, DispositionId, Obligation } from "../types";
 import { keepOdds, type KeepOdds } from "./disposition";
 
 /** solo_mode.qmd Part V, Deals: "When keeping a deal would cost the AA something real this turn, or
@@ -22,10 +22,13 @@ export function jointConfirmOdds(disposition: DispositionId): "automatic" | "lik
   return disposition === "allied" ? "automatic" : "likely";
 }
 
-export type Obligation = { kind: "act"; description: string } | { kind: "refrain"; description: string };
+/** The obligations that bind this turn: those without a turn, and those for this turn. */
+export function obligationsNow(obligations: readonly Obligation[], turn: number): Obligation[] {
+  return obligations.filter((o) => o.turn === undefined || o.turn === turn);
+}
 
 /** solo_mode.qmd Part V, Deals: "Obligations replace the table. If a deal requires the AA to act
  * this turn, that is its action; do not roll its table." */
-export function obligationReplacesTable(obligations: readonly Obligation[]): Obligation | undefined {
-  return obligations.find((o) => o.kind === "act");
+export function obligationReplacesTable(obligations: readonly Obligation[], turn: number): Obligation | undefined {
+  return obligationsNow(obligations, turn).find((o) => o.kind === "act");
 }

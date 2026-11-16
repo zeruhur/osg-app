@@ -61,8 +61,9 @@ describe("deals (solo_mode.qmd Part V, Deals)", () => {
   });
 
   it("lets an 'act' obligation replace the table roll; a 'refrain' one does not", () => {
-    expect(obligationReplacesTable([{ kind: "refrain", description: "not attack Essaveth" }])).toBeUndefined();
-    expect(obligationReplacesTable([{ kind: "act", description: "delay the loan" }])?.description).toBe("delay the loan");
+    expect(obligationReplacesTable([{ kind: "refrain", description: "not attack Essaveth" }], 1)).toBeUndefined();
+    expect(obligationReplacesTable([{ kind: "act", description: "delay the loan" }], 1)?.description).toBe("delay the loan");
+    expect(obligationReplacesTable([{ kind: "act", description: "delay the loan", turn: 1 }], 2)).toBeUndefined();
   });
 
   it("drops disposition by 2 when the player breaks a deal; joint actions confirm at Likely, Allied automatically", () => {

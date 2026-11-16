@@ -158,30 +158,23 @@ interface RollMeta { seed: string; position: number; faces: number[] }   // on e
 
 ### 4.3 Events
 
-Each event is `EventMeta & { type: ...; ... }`. A first pass for M0 (later milestones add `*Drafted` events):
+Each event is `EventMeta & { type: ...; ... }`. **As built, `packages/engine/src/events.ts` is authoritative.** Differences from the first plan:
 
-| Group | Events |
-| --- | --- |
-| Setup | `GameCreated{seed, packId, variant, playerFaction, turns}`, `ScenarioLoaded{scenario}`, `FactionAdded`, `StandingSet{order, reason?}`, `DispositionSet`, `ClockConfigured`, `FactEstablished{fact}`, `ThreadOpened` |
-| Turn | `GameStarted` (ends setup), `TurnOpened{opens}`, `StepAdvanced{to}`, `TurnClosed`, `GameEnded`. Payloads never reuse meta names (`seq`, `turn`, `step`, `author`); a compile-time guard in `events.ts` enforces it |
-| Oracle | `OracleAsked{id, question, odds, purpose}`, `OracleRolled{id, keep, kept, answer, roll: RollMeta}`, `OracleInterpreted{id, text}` |
-| Talk | `OfferMade{id, aa, gives, asks, fit: OfferFit}`, `OfferOddsComputed{id, odds, steps[]}`, `OfferResolved{id, result, condition?, counter?}`, `OfferWalkedAway{id}` |
-| Deals | `DealStruck{id, parties, terms, obligations[], since, until?}`, `DealKeepChecked{id, odds, oracleId}`, `DealBroken{id, by}`, `DealKept{id, by}` |
-| Actions | `ActionDeclared{id, faction, act, out, lev, bonus?, covert}`, `ActionLocked{id}`, `AAHeld{faction, reason}`, `AATableRolled{faction, index, entry, roll, veto: boolean}`, `TargetFilled{faction, target, rule}`, `ActionAccepted{id, faction, act, out, lev, bonus?, citedFacts[]}` |
-| Adjudicate | `ActionsClassified{groups[{class, actionIds[]}]}`, `LeverageGraded{actionId, grade, source: "player" \| "oracle"}`, `DiceRolled{actionId, grade, keep, roll, kept, doubles}`, `BonusSpent{faction, bonus, effect: "weak-to-strong" \| "4-5-to-6" \| "no-effect"}`, `ConflictResolved{groupId, prevailing[], standoff: boolean}`, `ResultBanded{actionId, band, effective}`, `InspirationRolled{table, actionId?, roll, entry}`, `ForceOfNatureUsed{actionId, roll, entry}` / `ForceOfNatureDeclined{actionId}`, `OutcomeAccepted{actionId, text, friction, newFacts[], crumbs[]}` |
-| Secrets | `SecretRolled{aa, roll, index, status: "private" \| "rumor" \| "public"}`, `SecretConfirmed{aa, index}` |
-| Signals | `SignalRolled{aa, roll, signal}`, `NoticeChecked{actionId, odds, oracleId}`, `CovertNoticed{actionId, by}` |
-| Update | `DispositionChanged{aa, from, to, causes[]}`, `TableEntryRewritten{aa, index, text}`, `ObjectiveChanged`, `BehaviorRerolled`, `ClockAdvanced{by, reason, to}`, `EscalationLanded{box}`, `FactionEliminated` |
-| Report | `ReportPublished{turn, header, paragraphs[], crumbs[], clockLine?, closing}` |
-| Meta | `DecisionAnswered{pointId, answer}` (the generic answer to any decision point) |
-
-`GameState` is the projection: `scenario, turn, step, factions{}, aa{}, standing[], dispositions{}, deals{}, facts{}, threads{}, actions{}, adjudications{}, clock, oracle{}, pending: DecisionPoint[], log meta (seed, nextSeq, rngPosition)`.
+- **`OracleConsulted`** is one event holding the odds, the purpose and the roll: the command sets the odds, the engine rolls in the same command, and nothing can change the odds afterwards. Its `purpose` links rule-driven questions (offer, deal keep, joint confirm, grade by Oracle, notice).
+- **`ActionDeclared` is the lock.** Declaring is committing (Part X, 3), so there is no separate `ActionLocked`.
+- **No generic `DecisionAnswered`.** Each decision point has its own command and domain event (`LeverageGraded`, `ConflictJudged`, `ConsolidatorThreatAnswered`, `ClockEffectAnswered`, ...), which keeps the log readable and typed.
+- Talk: `OfferMade` (with the computed odds and their steps), `OfferAnswered` (answer and follow-up), `OfferSettled`, `DealStruck`; deals: `DealKeepCostAnswered`, `DealKept`, `DealBroken`, `DealEnded`.
+- Step 5: `ActionsClassified` → `ConflictJudged` / `LeverageGraded` → (engine) `DiceRolled`, `BonusSpent`, `ResultBanded` (the band after conflict resolution, with the outcome: unopposed, rolled, as-rolled, prevails, worse, standoff) → `InspirationAnswered`/`InspirationRolled`/`InspirationApplied`, `ForceOfNatureAnswered`/`ForceOfNatureRolled`, `ClockEffectAnswered`/`ClockMoved`/`EscalationLanded`, `SecretRolled`/`SecretsResolved`/`InvestigationSixAnswered`/`FactRevealed` → `OutcomeAccepted` (with its new facts).
+- Classes are `unopposed | opposed | conflict`; a joint action is an action with several `participants`, classified like any other.
+- **Deferred to M1:** elimination and new powers (`FactionEliminated`), Oracle interpretation text (`OracleInterpreted`), Turn Zero Oracle questions during setup.
 
 `rngPosition` in the state is the position after the last roll event. Command handlers build `createRng(seed, state.rngPosition)`, so replaying commands is deterministic without storing Rng objects.
 
 ### 4.4 Decision points
 
-A typed union; while `state.pending` isn't empty, the turn can't advance.
+As built: `nextRequired(state)` in `turn.ts` returns `{ decisions, auto, canAdvance }`. **Decisions** are what only the player can give (judgment and writing); each is answered by its own command (`execute(state, command)` in `commands.ts`), which checks that a matching decision is open. **Automatic tasks** are what the engine does as soon as nothing blocks it: every roll the rules call for (table rolls, deal keep checks, joint confirmations, the group rolls, Signals, notice checks), filling a target the rules decide, holds, deal expiry, the end-of-turn Clock, closing the turn. `execute` runs them after each command, so a command returns every event up to the next decision. Optional player actions (`askOracle`, `makeOffer`, `vetoEntry`, `breakDeal`, `changeObjective`, `confirmSecret`) are allowed in their steps without being required.
+
+The decision kinds below are the planned ones; the built union is `Decision` in `turn.ts` (adds `declare`, `writeAAAction`, `writeOutcome`, `settleOffer`, `signalOffer`, `inspirationTarget`, `investigationSix`, `revealToAA`, `exposure`, `interested`, `report`, `startGame`, `openTurn`).
 
 | Kind | Where | What it asks | Engine contribution |
 | --- | --- | --- | --- |
@@ -202,8 +195,6 @@ A typed union; while `state.pending` isn't empty, the turn can't advance.
 | `dispositionCauses` | step 7 | per AA: kept deal / clear benefit / harm | applies deltas, once per cause, clamped |
 | `adaptation` | step 7 | which entry to rewrite, and the new text | trigger detection is engine-side |
 | `standing` | step 7 | the new order | applies list effects from inspiration first, as a proposal |
-
-`DecisionAnswered` carries the answer; the command handler validates it against the point's schema and emits the domain events.
 
 ### 4.5 Turn state machine (`turn.ts`)
 

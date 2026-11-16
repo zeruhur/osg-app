@@ -24,7 +24,7 @@ export function rollInspiration(table: InspirationTable, rng: Rng): InspirationE
 
 /** The table a band calls for, if any: a 6 may add something especially good, a 1 something
  * especially bad (contested_ground.qmd Part IV). Using it is optional (`inspiration` decision). */
-export function inspirationTableFor(band: Band): InspirationTable | undefined {
+export function inspirationTableFor(band: Band): "especiallyGood" | "especiallyBad" | undefined {
   return band === "especially-good" ? "especiallyGood" : band === "especially-bad" ? "especiallyBad" : undefined;
 }
 
