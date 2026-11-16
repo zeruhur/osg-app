@@ -1,10 +1,14 @@
-import type { Command, Decision, GameState, Requirements } from "@osg/engine";
+import type { Command, GameState, Requirements } from "@osg/engine";
 import { ChevronRight } from "lucide-react";
 import { STEP_NAMES } from "../components/game-bits";
 import { AAActions } from "./AAActions";
+import { Adjudicate } from "./Adjudicate";
 import { Declare } from "./Declare";
+import { ReportStep } from "./ReportStep";
+import { Signals } from "./Signals";
 import { TakeStock } from "./TakeStock";
 import { Talk } from "./Talk";
+import { Update } from "./Update";
 
 export interface StepProps {
   state: GameState;
@@ -59,18 +63,11 @@ export function TurnView({ state, requirements, run }: StepProps) {
       {state.step === 2 && <Talk state={state} decisions={decisions} run={run} />}
       {state.step === 3 && <Declare state={state} run={run} />}
       {state.step === 4 && <AAActions state={state} decisions={decisions} run={run} />}
-      {state.step >= 5 && decisions.length > 0 && (
-        <ul className="decisions">
-          {decisions.map((d, i) => (
-            <li key={i}>{describe(d)}</li>
-          ))}
-        </ul>
-      )}
+      {state.step === 5 && <Adjudicate state={state} decisions={decisions} run={run} />}
+      {state.step === 6 && <Signals state={state} decisions={decisions} run={run} />}
+      {state.step === 7 && <Update state={state} decisions={decisions} run={run} />}
+      {state.step === 8 && <ReportStep state={state} run={run} />}
       {canAdvance && state.step > 1 && <p className="dim ready">Everything this step needs is done. Go on when you're ready.</p>}
     </section>
   );
-}
-
-function describe(d: Decision): string {
-  return "aa" in d ? `${d.kind} (${d.aa})` : "action" in d ? `${d.kind} (${d.action})` : d.kind;
 }
