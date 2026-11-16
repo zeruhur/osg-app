@@ -6,6 +6,7 @@ import type {
   Band,
   BehaviorId,
   DealId,
+  Debrief,
   DealTerms,
   DispositionId,
   Escalation,
@@ -497,6 +498,14 @@ export interface ReportPublished {
   threads: { id: ThreadId; text: string; facts: FactId[] }[];
 }
 
+// ---------- after the game ----------
+
+/** The Debrief (Part XI). May be written again; the latest one counts. */
+export interface DebriefWritten {
+  type: "DebriefWritten";
+  debrief: Debrief;
+}
+
 export type EventBody =
   | GameCreated
   | StandingSet
@@ -557,7 +566,8 @@ export type EventBody =
   | TableEntryRewritten
   | ObjectiveChanged
   | BehaviorRerolled
-  | ReportPublished;
+  | ReportPublished
+  | DebriefWritten;
 
 export type GameEvent = EventMeta & EventBody;
 export type EventType = EventBody["type"];

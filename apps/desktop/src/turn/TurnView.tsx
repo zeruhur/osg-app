@@ -1,4 +1,5 @@
-import type { Command, GameState, Requirements } from "@osg/engine";
+import type { Command, GameEvent, GameState, Requirements } from "@osg/engine";
+import { Debrief } from "../screens/Debrief";
 import { ChevronRight } from "lucide-react";
 import { STEP_NAMES } from "../components/game-bits";
 import { AAActions } from "./AAActions";
@@ -14,10 +15,11 @@ export interface StepProps {
   state: GameState;
   requirements: Requirements;
   run: (command: Command) => Promise<boolean>;
+  log: readonly GameEvent[];
 }
 
 /** The centre of the game screen: the current step, its open decisions, and Advance. */
-export function TurnView({ state, requirements, run }: StepProps) {
+export function TurnView({ state, requirements, run, log }: StepProps) {
   const { decisions, canAdvance } = requirements;
 
   if (state.status === "setup") {
@@ -36,7 +38,7 @@ export function TurnView({ state, requirements, run }: StepProps) {
     return (
       <section className="step-view">
         {state.status === "ended" ? (
-          <h2>The game is over</h2>
+          <Debrief state={state} log={log} run={run} />
         ) : (
           <>
             <h2>{state.turn === 0 ? "Ready for Turn 1" : `Turn ${state.turn} is over`}</h2>

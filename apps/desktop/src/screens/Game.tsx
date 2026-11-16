@@ -1,11 +1,12 @@
 import type { Command } from "@osg/engine";
 import { ArrowLeft, Moon, PanelRight, Sun, Undo2 } from "lucide-react";
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { ToastMessage } from "../components/common";
 import { ClockBar, STEP_NAMES, StandingList } from "../components/game-bits";
 import type { Theme } from "../components/theme";
 import { CommandRefused, type CampaignSession } from "../session/session";
 import { useCampaign } from "../session/useCampaign";
+import { Dashboard, Facts, LogPanel, Oracle, Reports } from "../panels/Panels";
 import { TurnView } from "../turn/TurnView";
 
 export type DrawerTab = "dashboard" | "facts" | "log" | "reports" | "oracle";
@@ -17,21 +18,16 @@ const TABS: { id: DrawerTab; label: string }[] = [
   { id: "oracle", label: "Oracle" }
 ];
 
-export interface GameContext {
-  /** Runs a command; shows the refusal as a toast and returns false if it was refused. */
-  run: (command: Command) => Promise<boolean>;
-}
-
 export function Game(props: {
   session: CampaignSession;
   theme: Theme;
   onToggleTheme: () => void;
   onBack: () => void;
   toast: (m: ToastMessage) => void;
-  panels?: (tab: DrawerTab, ctx: GameContext) => ReactNode;
 }) {
   const { state, meta, batches, requirements, undo } = useCampaign(props.session);
   const [drawer, setDrawer] = useState<DrawerTab | null>("dashboard");
+  const log = useMemo(() => batches.flatMap((b) => b.events), [batches]);
   const { toast, session } = props;
 
   const run = useCallback(
@@ -98,7 +94,7 @@ export function Game(props: {
         </nav>
 
         <main className="centre">
-          <TurnView state={state} requirements={requirements} run={run} />
+          <TurnView state={state} requirements={requirements} run={run} log={log} />
         </main>
 
         {drawer && (
@@ -110,7 +106,13 @@ export function Game(props: {
                 </button>
               ))}
             </div>
-            <div className="drawer-body">{props.panels?.(drawer, { run }) ?? <p className="dim">Coming in M1 step 7.</p>}</div>
+            <div className="drawer-body">
+              {drawer === "dashboard" && <Dashboard state={state} />}
+              {drawer === "facts" && <Facts state={state} />}
+              {drawer === "log" && <LogPanel batches={batches} onUndo={doUndo} />}
+              {drawer === "reports" && <Reports state={state} />}
+              {drawer === "oracle" && <Oracle log={log} run={run} />}
+            </div>
           </aside>
         )}
       </div>

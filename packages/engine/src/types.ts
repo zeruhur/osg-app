@@ -356,6 +356,22 @@ export interface GameState {
   current: TurnData;
   /** Published Reports, by turn. */
   reports: Readonly<Record<number, Report>>;
+  /** Written after the game ends; the latest version. */
+  debrief?: Debrief | undefined;
+}
+
+/** solo_mode.qmd Part XI, The Debrief. */
+export interface Debrief {
+  /** One line per faction on where it ends. */
+  closingFrame: Record<FactionId, string>;
+  /** 1. Your objectives: achieved, or groundwork laid? Why? */
+  objectives: string;
+  /** 2. The AAs' objectives, compared with yours. */
+  aaObjectives: string;
+  /** 3. The surprise: which turn, and what produced it. */
+  surprise: string;
+  /** 4. The design: what you would change. */
+  design: string;
 }
 
 export interface Report {

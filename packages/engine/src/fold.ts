@@ -631,6 +631,12 @@ function reduce(d: Mutable<GameState>, e: GameEvent): void {
       return;
     }
 
+    case "DebriefWritten": {
+      if (d.status !== "ended") fail("out-of-order", "the Debrief comes after the game ends");
+      d.debrief = structuredClone(e.debrief);
+      return;
+    }
+
     default: {
       const unknown: never = e;
       return fail("invalid", `unknown event ${(unknown as GameEvent).type}`);

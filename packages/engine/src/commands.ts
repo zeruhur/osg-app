@@ -21,6 +21,7 @@ import type {
   ActionState,
   Author,
   DealTerms,
+  Debrief,
   FactionId,
   FactTags,
   GameState,
@@ -85,7 +86,9 @@ export type Command =
   | { type: "publishReport"; report: Report; threads?: { text: string; facts: string[] }[] }
   // any time in a turn
   | { type: "confirmSecret"; aa: FactionId; index: number }
-  | { type: "closeThread"; thread: string };
+  | { type: "closeThread"; thread: string }
+  // after the game
+  | { type: "writeDebrief"; debrief: Debrief };
 
 export interface ActionInput {
   act: string;
@@ -560,6 +563,10 @@ function handle(tx: Tx, c: Command): void {
 
     case "closeThread":
       return tx.emit({ type: "ThreadClosed", thread: c.thread });
+
+    case "writeDebrief":
+      if (s.status !== "ended") fail("out-of-order", "the Debrief comes after the game ends");
+      return tx.emit({ type: "DebriefWritten", debrief: c.debrief });
   }
 }
 
