@@ -61,6 +61,7 @@ export class SqliteStore implements CampaignStore {
       list.push(JSON.parse(e.json) as GameEvent);
       byBatch.set(e.batch, list);
     }
+    if (rows[0]?.batch !== 0) throw new StoreError(`the log of campaign "${meta.title}" is missing its setup; delete the campaign`);
     return { meta, batches: rows.map((r) => ({ batch: r.batch, command: r.command, at: r.at, events: byBatch.get(r.batch) ?? [] })) };
   }
 
@@ -84,13 +85,16 @@ export class SqliteStore implements CampaignStore {
   }
 
   async remove(id: string): Promise<void> {
+    // Index row first: once it is gone the campaign is gone from the list, even if clearing its
+    // file fails below.
+    await (await this.indexDb()).execute("DELETE FROM campaigns WHERE id = $1", [id]);
     const db = await this.campaignDb(id);
     // The file itself stays (no filesystem access from the webview); its tables go.
     await db.execute("DROP TABLE IF EXISTS events");
     await db.execute("DROP TABLE IF EXISTS batches");
-    await db.close();
     this.open.delete(id);
-    await (await this.indexDb()).execute("DELETE FROM campaigns WHERE id = $1", [id]);
+    // Name the pool: the plugin's close() with no argument closes every database, the index too.
+    await db.close(db.path);
   }
 
   private async writeBatch(id: string, batch: StoredBatch): Promise<void> {
