@@ -42,4 +42,18 @@ describe("App: campaigns", () => {
     const [meta] = await store.list();
     expect(meta).toMatchObject({ status: "playing", turn: 1 });
   });
+
+  it("shows the player's brief in the side panel from the start", async () => {
+    const user = userEvent.setup();
+    render(<App store={new MemoryStore()} />);
+    await user.click(await screen.findByRole("button", { name: /New campaign/ }));
+    await user.click(screen.getByLabelText(/The Kingdom of Caldrath/));
+    await user.click(screen.getByRole("button", { name: "Create campaign" }));
+    const panel = within(await screen.findByRole("complementary", { name: "Side panel" }));
+    expect(panel.getByRole("tab", { name: "Brief" }).getAttribute("aria-selected")).toBe("true");
+    expect(panel.getByRole("heading", { name: "Caldrath: your brief" })).toBeTruthy();
+    expect(panel.getByText(/Short-term objective/)).toBeTruthy();
+    expect(panel.getByText(/Long-term objective/)).toBeTruthy();
+    expect(panel.getByText(/a second army, for one campaign/)).toBeTruthy();
+  });
 });

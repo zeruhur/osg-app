@@ -6,11 +6,12 @@ import { ClockBar, STEP_NAMES, StandingList } from "../components/game-bits";
 import type { Theme } from "../components/theme";
 import { CommandRefused, type CampaignSession } from "../session/session";
 import { useCampaign } from "../session/useCampaign";
-import { Dashboard, Facts, LogPanel, Oracle, Reports } from "../panels/Panels";
+import { Brief, Dashboard, Facts, LogPanel, Oracle, Reports } from "../panels/Panels";
 import { TurnView } from "../turn/TurnView";
 
-export type DrawerTab = "dashboard" | "facts" | "log" | "reports" | "oracle";
+export type DrawerTab = "brief" | "dashboard" | "facts" | "log" | "reports" | "oracle";
 const TABS: { id: DrawerTab; label: string }[] = [
+  { id: "brief", label: "Brief" },
   { id: "dashboard", label: "Dashboard" },
   { id: "facts", label: "Facts" },
   { id: "log", label: "Log" },
@@ -26,7 +27,7 @@ export function Game(props: {
   toast: (m: ToastMessage) => void;
 }) {
   const { state, meta, batches, requirements, undo } = useCampaign(props.session);
-  const [drawer, setDrawer] = useState<DrawerTab | null>("dashboard");
+  const [drawer, setDrawer] = useState<DrawerTab | null>("brief");
   const log = useMemo(() => batches.flatMap((b) => b.events), [batches]);
   const { toast, session } = props;
 
@@ -67,7 +68,7 @@ export function Game(props: {
           <button onClick={props.onToggleTheme} title="Switch theme" aria-label="Switch theme">
             {props.theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>
-          <button onClick={() => setDrawer(drawer ? null : "dashboard")} title="Side panel" aria-label="Toggle side panel" className={drawer ? "active" : undefined}>
+          <button onClick={() => setDrawer(drawer ? null : "brief")} title="Side panel" aria-label="Toggle side panel" className={drawer ? "active" : undefined}>
             <PanelRight size={16} />
           </button>
         </div>
@@ -107,6 +108,7 @@ export function Game(props: {
               ))}
             </div>
             <div className="drawer-body">
+              {drawer === "brief" && <Brief state={state} />}
               {drawer === "dashboard" && <Dashboard state={state} />}
               {drawer === "facts" && <Facts state={state} />}
               {drawer === "log" && <LogPanel batches={batches} onUndo={doUndo} />}

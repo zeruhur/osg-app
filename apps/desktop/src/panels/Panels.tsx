@@ -7,6 +7,102 @@ import type { StoredBatch } from "../store";
 import { ReportView } from "../turn/TakeStock";
 import type { Run } from "../turn/shared";
 
+/** Brief: the player's faction brief (solo_mode.qmd Appendix A: objectives, position, bonus), the
+ * situation, the map and the other factions' public faces. Position lines are read from the facts
+ * so they show what the log holds. */
+export function Brief({ state }: { state: GameState }) {
+  const me = state.factions[state.player]!;
+  const mine = (id: string) =>
+    Object.values(state.facts)
+      .filter((f) => f.origin === "brief" && f.visibility.kind === "private" && f.visibility.faction === id)
+      .sort((a, b) => a.source - b.source);
+  const leverage = (f: { leverage: { primary: string; secondary?: string | undefined } }) =>
+    f.leverage.secondary ? `${f.leverage.primary}, ${f.leverage.secondary}` : f.leverage.primary;
+  return (
+    <div className="panel">
+      <h4>{me.name}: your brief</h4>
+      <p>{me.public}</p>
+      <p>
+        <strong>Short-term objective.</strong> {me.objectives.shortTerm}
+      </p>
+      {me.objectives.longTerm && (
+        <p>
+          <strong>Long-term objective.</strong> {me.objectives.longTerm}
+        </p>
+      )}
+      <p>
+        <strong>Your position.</strong>
+      </p>
+      <ul className="facts">
+        {mine(state.player).map((f) => (
+          <li key={f.id}>{f.text}</li>
+        ))}
+      </ul>
+      {me.bonuses.map((b) => (
+        <p key={b.name}>
+          <strong>Bonus: {b.name}</strong> ({b.usesLeft} of {b.uses} left). {b.text}
+        </p>
+      ))}
+      <p className="dim">Leverage: {leverage(me)}</p>
+
+      <h4>The situation</h4>
+      <blockquote className="problem">{state.scenario.problem}</blockquote>
+      <p>{state.scenario.world}</p>
+      {state.scenario.unsettled.length > 0 && (
+        <>
+          <p>
+            <strong>Unsettled.</strong>
+          </p>
+          <ul className="facts">
+            {state.scenario.unsettled.map((u) => (
+              <li key={u}>{u}</li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      <h4>The map</h4>
+      <ul className="facts">
+        {state.scenario.map.map((l) => (
+          <li key={l.id}>
+            <strong>{l.name}</strong>
+            {l.contested && <span className="badge">contested</span>} {l.notes}
+          </li>
+        ))}
+      </ul>
+
+      <h4>The other factions</h4>
+      {Object.values(state.factions)
+        .filter((f) => f.id !== state.player)
+        .map((f) => {
+          const aa = state.aa[f.id];
+          return (
+            <div key={f.id} className="faction-row">
+              <div>
+                <strong>{f.name}</strong>
+                {f.kind === "background" && <span className="badge">background</span>}
+                {aa && <span className="badge">{aa.behavior}</span>}
+              </div>
+              <div>{f.public}</div>
+              {aa && <div className="dim">Objective: {f.objectives.shortTerm}</div>}
+              {mine(f.id).map((p) => (
+                <div key={p.id} className="dim">
+                  Position: {p.text}
+                </div>
+              ))}
+              {aa && <div className="dim">Leverage: {leverage(f)}</div>}
+              {f.bonuses.map((b) => (
+                <div key={b.name} className="dim">
+                  Bonus: {b.name} ({b.usesLeft} of {b.uses} left)
+                </div>
+              ))}
+            </div>
+          );
+        })}
+    </div>
+  );
+}
+
 /** Dashboard: factions, deals, the Clock and its Escalations. */
 export function Dashboard({ state }: { state: GameState }) {
   const deals = Object.values(state.deals);
