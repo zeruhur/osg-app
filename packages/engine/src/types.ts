@@ -1,6 +1,17 @@
-import type { BehaviorId, DispositionId } from "@osg/rules-data";
+import type { AnswerId, BandId, BehaviorId, DispositionId, OracleOddsId } from "@osg/rules-data";
 
 export type { BehaviorId, DispositionId };
+
+/** Leverage grade (contested_ground.qmd Part IV, The Core Assessment). */
+export type Grade = "strong" | "weak";
+/** Oracle odds that roll (solo_mode.qmd Part III, Asking). */
+export type OracleOdds = OracleOddsId;
+/** The full Offer ladder: the ends don't roll (solo_mode.qmd Part V, Making an Offer). */
+export type OfferOdds = "refused" | OracleOdds | "accepted";
+/** An Oracle answer, "yes-and" (6) to "no-and" (1). */
+export type Answer = AnswerId;
+/** Result band: 6 especially good, 4-5 success, 2-3 worse than desired, 1 especially bad. */
+export type Band = BandId;
 
 export type FactionId = string;
 export type FactId = string;

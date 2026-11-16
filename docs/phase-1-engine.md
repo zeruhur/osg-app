@@ -163,7 +163,7 @@ Each event is `EventMeta & { type: ...; ... }`. A first pass for M0 (later miles
 | Group | Events |
 | --- | --- |
 | Setup | `GameCreated{seed, packId, variant, playerFaction, turns}`, `ScenarioLoaded{scenario}`, `FactionAdded`, `StandingSet{order, reason?}`, `DispositionSet`, `ClockConfigured`, `FactEstablished{fact}`, `ThreadOpened` |
-| Turn | `TurnOpened{turn}`, `StepAdvanced{to}`, `TurnClosed` |
+| Turn | `GameStarted` (ends setup), `TurnOpened{opens}`, `StepAdvanced{to}`, `TurnClosed`, `GameEnded`. Payloads never reuse meta names (`seq`, `turn`, `step`, `author`); a compile-time guard in `events.ts` enforces it |
 | Oracle | `OracleAsked{id, question, odds, purpose}`, `OracleRolled{id, keep, kept, answer, roll: RollMeta}`, `OracleInterpreted{id, text}` |
 | Talk | `OfferMade{id, aa, gives, asks, fit: OfferFit}`, `OfferOddsComputed{id, odds, steps[]}`, `OfferResolved{id, result, condition?, counter?}`, `OfferWalkedAway{id}` |
 | Deals | `DealStruck{id, parties, terms, obligations[], since, until?}`, `DealKeepChecked{id, odds, oracleId}`, `DealBroken{id, by}`, `DealKept{id, by}` |
@@ -286,7 +286,7 @@ Worked check (App. B): Meranto, neutral, advances objective → even +1 = **like
 ### 5.7 Deals (Solo V, Deals; Joint Actions with an AA)
 
 - `obligations[]` per party: `{kind: "act", description}` or `{kind: "refrain", description}`.
-- Step 4, per AA, in this order (Solo X.4): (1) an `act` obligation this turn → that is its action (no table). Keep check: a **Schemer** checks every turn it has an active deal (no `dealKeepCost` question); any other AA checks only if `dealKeepCost` says it costs something real. Odds from disposition: wary even, neutral likely, open likely, allied automatic (Schemer: likely), hostile n/a. On a no → `DealBroken{by: aa}`, and its action exploits the break (`targetChoice` with the deal partner suggested). (2) Hold rule. (3) Table roll; if a `refrain` obligation forbids the entry → reroll (this does **not** use the veto).
+- Step 4, per AA, in this order (Solo X.4): (1) an `act` obligation this turn → that is its action (no table). Keep check: a **Schemer** checks every turn it has an active deal (no `dealKeepCost` question); any other AA checks only if `dealKeepCost` says it costs something real. Odds from disposition: wary even, neutral likely, open likely, allied automatic (Schemer: likely), hostile unlikely (A9). On a no → `DealBroken{by: aa}`, and its action exploits the break (`targetChoice` with the deal partner suggested). (2) Hold rule. (3) Table roll; if a `refrain` obligation forbids the entry → reroll (this does **not** use the veto).
 - Player breaks a deal → −2 disposition (the step 7 cause is pre-checked).
 - Joint action with an AA: each turn, ask "Does [AA] confirm?" at likely (allied: automatic). On a no → the AA rolls its own table and the joint action's leverage is regraded.
 
@@ -306,7 +306,7 @@ Holding emits `AAHeld` and an unopposed consolidation action (the player writes 
 
 **Target fill (`[target]`):**
 1. Opportunist → the lowest on Standing; Balancer → the highest; Reactor → the faction that last affected it.
-2. Self-skip: if that is the AA itself, Opportunist takes the next one **up** from the bottom, Balancer the next one **down** from the top.
+2. Self-skip: if that is the AA itself, Opportunist takes the next one **up** from the bottom, Balancer the next one **down** from the top (A10).
 3. Otherwise → "most in the way of its objective" = `targetChoice` (judgment). Before asking: if the disposition is **hostile** → the player, automatically ("picks you whenever its rule allows a choice"). The tie-break among equal candidates is resolved by the answer itself: wary → the player is preferred; open → the player is excluded; allied → never targets the player unless the rule forces it (also applies to step 1).
 4. App. B check: Caldrath is an Aggressor and Hostile → target = Essaveth with no question. ✓
 
@@ -415,3 +415,5 @@ None of these block the code: each is isolated behind a flag or a decision point
 - **A6. A bonus on Strong with a kept 6.** The rules only cover 4–5 and 1–3. Engine: no improvement, the bonus is spent. Does a player even have to spend it if it's declared? Yes, it's declared at step 3 and locked.
 - **A7. "Both outcomes can be true"** with 3+ colliding actions: the rules only define the either/or case for 3+. Engine: `bothCanBeTrue` is offered only for two-action conflicts.
 - **A8. Standing moves from the inspiration tables vs. the step 7 Standing revision.** App. B shows the move folded into the step 7 order. The engine treats inspiration moves as the default proposal for the `standing` point, not as a separate immediate change.
+- **A9. A Hostile AA's deal-keeping odds.** The Disposition table says "n/a" under Keeping deals for Hostile, but a Hostile AA can hold a deal: it accepts an Offer that serves its objective at Unlikely odds, or a deal partner's disposition drops to Hostile while the deal runs. Engine: Unlikely, one step below Wary (`keepOdds` in `rules/disposition.ts`). Upstream fix: give Hostile a value in the table.
+- **A10. Self-skip direction for Opportunist and Balancer.** Part IV: "If its rule points at itself, take the next faction down (Opportunist) or up (Balancer) the list." An Opportunist points at itself only when it is lowest, so there is nothing further down; read literally, the directions are inverted. Engine: the next faction in from that end (Opportunist: second lowest; Balancer: second highest). Upstream fix: "up (Opportunist) or down (Balancer)".
