@@ -8,7 +8,7 @@ A referee's desk for freeform Open Strategy Games (OSG), solo first: the player 
 
 The design source of truth is `Freeform Strategy App Architecture and Stack (OSG Solo).md` (architecture, data model, LLM roles, stack, salvage table, M0 brief). The milestone plan is `docs/PLAN.md`. Read both before structural work.
 
-**Status:** Phase 1 (M0, the rules engine) is in progress on branch `m0/engine`, specified in `docs/phase-1-engine.md`. Follow its work order (section 9), one commit per step. Its appendix lists rule ambiguities that are resolved by flags or decision points. Don't invent a third resolution.
+**Status:** M0 (the rules engine, `docs/phase-1-engine.md`) is merged. M1 (the desktop app played by hand, `docs/phase-2-desktop.md`) is on branch `m1/desktop`, one commit per work step. The engine spec's appendix lists rule ambiguities (A2-A12) resolved by flags or decision points; don't invent a third resolution.
 
 ## Commands
 
@@ -23,6 +23,8 @@ pnpm vitest run packages/engine/src/rules/resolution.test.ts # one file
 pnpm vitest run -t "bonus on Strong"                         # one test by name
 pnpm typecheck                       # root tsc, then each package's own `typecheck` script (CI gate)
 pnpm sim --games 1000 --seed osg     # Monte Carlo harness (apps/sim); --help for options; ~0.08 s/game
+pnpm --filter @osg/desktop dev       # the app in a browser at http://localhost:1430 (IndexedDB store)
+cd apps/desktop && npx tauri dev     # the desktop window (SQLite store); the first Rust build takes ~8 min
 ```
 
 On this Windows machine pnpm is not on PATH globally: use `corepack pnpm ...`. Scripts that call `pnpm` again (such as `typecheck`) need a `pnpm` shim on PATH, or `corepack enable`.
