@@ -1,6 +1,10 @@
 import type { Command, Decision, GameState, Requirements } from "@osg/engine";
 import { ChevronRight } from "lucide-react";
 import { STEP_NAMES } from "../components/game-bits";
+import { AAActions } from "./AAActions";
+import { Declare } from "./Declare";
+import { TakeStock } from "./TakeStock";
+import { Talk } from "./Talk";
 
 export interface StepProps {
   state: GameState;
@@ -51,13 +55,18 @@ export function TurnView({ state, requirements, run }: StepProps) {
           Next step <ChevronRight size={16} />
         </button>
       </header>
-      {decisions.length > 0 && (
+      {state.step === 1 && <TakeStock state={state} />}
+      {state.step === 2 && <Talk state={state} decisions={decisions} run={run} />}
+      {state.step === 3 && <Declare state={state} run={run} />}
+      {state.step === 4 && <AAActions state={state} decisions={decisions} run={run} />}
+      {state.step >= 5 && decisions.length > 0 && (
         <ul className="decisions">
           {decisions.map((d, i) => (
             <li key={i}>{describe(d)}</li>
           ))}
         </ul>
       )}
+      {canAdvance && state.step > 1 && <p className="dim ready">Everything this step needs is done. Go on when you're ready.</p>}
     </section>
   );
 }

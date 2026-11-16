@@ -4,12 +4,13 @@ import { useTheme } from "./components/theme";
 import { CampaignList } from "./screens/CampaignList";
 import { Game } from "./screens/Game";
 import { NewCampaign } from "./screens/NewCampaign";
-import { CampaignSession, type NewCampaign as NewCampaignInput } from "./session/session";
+import { CampaignSession, type NewCampaign as NewCampaignInput, type SessionOptions } from "./session/session";
 import { defaultStore, type CampaignMeta, type CampaignStore } from "./store";
 
 type Screen = { kind: "list" } | { kind: "new" } | { kind: "game"; session: CampaignSession };
 
-export default function App({ store: given }: { store?: CampaignStore }) {
+/** `store` and `sessionOptions` are for tests (a memory store, scripted dice). */
+export default function App({ store: given, sessionOptions }: { store?: CampaignStore; sessionOptions?: SessionOptions }) {
   const [theme, toggleTheme] = useTheme();
   const [store, setStore] = useState<CampaignStore | null>(given ?? null);
   const [campaigns, setCampaigns] = useState<CampaignMeta[] | null>(null);
@@ -31,7 +32,7 @@ export default function App({ store: given }: { store?: CampaignStore }) {
   const open = async (id: string) => {
     if (!store) return;
     try {
-      setScreen({ kind: "game", session: await CampaignSession.open(store, id) });
+      setScreen({ kind: "game", session: await CampaignSession.open(store, id, sessionOptions) });
     } catch (e) {
       fail(e);
     }
@@ -41,7 +42,7 @@ export default function App({ store: given }: { store?: CampaignStore }) {
     if (!store) return;
     setBusy(true);
     try {
-      setScreen({ kind: "game", session: await CampaignSession.create(store, input) });
+      setScreen({ kind: "game", session: await CampaignSession.create(store, input, sessionOptions) });
     } catch (e) {
       fail(e);
     } finally {
