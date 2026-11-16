@@ -8,24 +8,26 @@ A referee's desk for freeform Open Strategy Games (OSG), solo first: the player 
 
 The design source of truth is `Freeform Strategy App Architecture and Stack (OSG Solo).md` (architecture, data model, LLM roles, stack, salvage table, M0 brief). The milestone plan is `docs/PLAN.md`. Read both before structural work.
 
-**Status:** pre-scaffold. No code or commits yet. Phase 1 (M0, the rules engine) is specified in `docs/phase-1-engine.md`: follow its work order (section 9), one commit per step. Its appendix lists rule ambiguities that are resolved by flags or decision points. Don't invent a third resolution.
+**Status:** Phase 1 (M0, the rules engine) is in progress on branch `m0/engine`, specified in `docs/phase-1-engine.md`. Follow its work order (section 9), one commit per step. Its appendix lists rule ambiguities that are resolved by flags or decision points. Don't invent a third resolution.
 
-## Commands (once M0 scaffold exists)
+## Commands
 
-pnpm workspace, TypeScript strict, Vitest.
+pnpm workspace (`pnpm@10.20.0` via `packageManager`), TypeScript ~5.8 strict, Vitest 5 with one project per package (root `vitest.config.ts`). Node ≥ 22 (CI runs 22).
 
 ```sh
-git submodule update --init          # rules/osg must be present; the drift and replay tests read it
+git submodule update --init          # rules/osg must be present; tests read it
 pnpm install
-pnpm -r test                         # all packages
-pnpm --filter @osg/engine test       # one package
-pnpm --filter @osg/engine exec vitest run src/resolution.test.ts   # one file
-pnpm --filter @osg/engine exec vitest run -t "bonus on Strong"     # one test by name
-pnpm -r exec tsc --noEmit            # typecheck (CI gate)
-pnpm --filter @osg/sim start -- --games 1000 --seed 42                 # Monte Carlo harness
+pnpm test                            # every project (root workspace tests + packages/* + apps/*)
+pnpm vitest run --project @osg/engine                        # one package
+pnpm vitest run packages/engine/src/rules/resolution.test.ts # one file
+pnpm vitest run -t "bonus on Strong"                         # one test by name
+pnpm typecheck                       # root tsc, then each package's own `typecheck` script (CI gate)
+pnpm sim --games 1000 --seed 42      # Monte Carlo harness (apps/sim, from step 9)
 ```
 
-Update this section when the real scripts and package names land.
+On this Windows machine pnpm is not on PATH globally: use `corepack pnpm ...`. Scripts that call `pnpm` again (such as `typecheck`) need a `pnpm` shim on PATH, or `corepack enable`.
+
+Each new package needs a `typecheck` script (`tsc --noEmit`), a `test` script, a tsconfig that extends `../../tsconfig.base.json`, and a `vitest.config.ts` whose project `name` is the package name.
 
 ## Rules source
 
