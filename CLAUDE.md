@@ -22,10 +22,12 @@ pnpm vitest run --project @osg/engine                        # one package
 pnpm vitest run packages/engine/src/rules/resolution.test.ts # one file
 pnpm vitest run -t "bonus on Strong"                         # one test by name
 pnpm typecheck                       # root tsc, then each package's own `typecheck` script (CI gate)
-pnpm sim --games 1000 --seed 42      # Monte Carlo harness (apps/sim, from step 9)
+pnpm sim --games 1000 --seed osg     # Monte Carlo harness (apps/sim); --help for options; ~0.08 s/game
 ```
 
 On this Windows machine pnpm is not on PATH globally: use `corepack pnpm ...`. Scripts that call `pnpm` again (such as `typecheck`) need a `pnpm` shim on PATH, or `corepack enable`.
+
+The sim plays whole games through `execute` with a policy answering every decision (`apps/sim/src/policy.ts`); run it after engine changes: an engine bug shows up as a thrown error naming the game seed, turn, step and command. Its rates reflect that naive policy, not game balance.
 
 Each new package needs a `typecheck` script (`tsc --noEmit`), a `test` script, a tsconfig that extends `../../tsconfig.base.json`, and a `vitest.config.ts` whose project `name` is the package name.
 

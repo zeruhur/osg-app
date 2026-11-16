@@ -1,0 +1,21 @@
+{
+  "name": "@osg/sim",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Monte Carlo harness: plays OSG Solo games through the engine with simple policies answering every decision point, and reports outcome rates.",
+  "scripts": {
+    "start": "tsx src/cli.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@osg/dice": "workspace:*",
+    "@osg/engine": "workspace:*",
+    "@osg/rules-data": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
+  }
+}
