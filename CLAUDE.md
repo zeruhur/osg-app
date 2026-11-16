@@ -8,7 +8,7 @@ A referee's desk for freeform Open Strategy Games (OSG), solo first: the player 
 
 The design source of truth is `Freeform Strategy App Architecture and Stack (OSG Solo).md` (architecture, data model, LLM roles, stack, salvage table, M0 brief). The milestone plan is `docs/PLAN.md`. Read both before structural work.
 
-**Status:** M0 (the rules engine, `docs/phase-1-engine.md`) is merged. M1 (the desktop app played by hand, `docs/phase-2-desktop.md`) is on branch `m1/desktop`, one commit per work step. The engine spec's appendix lists rule ambiguities (A2-A12) resolved by flags or decision points; don't invent a third resolution.
+**Status:** M0 (the rules engine, `docs/phase-1-engine.md`) is merged. M1 (the desktop app played by hand, `docs/phase-2-desktop.md`) is on branch `m1/desktop`, one commit per work step. M2 (every drafting role of the turn, `docs/phase-3-llm.md`) is specified, not started; the default model is `claude-haiku-5-5`. The engine spec's appendix lists rule ambiguities (A2-A12) resolved by flags or decision points; don't invent a third resolution.
 
 ## Commands
 
