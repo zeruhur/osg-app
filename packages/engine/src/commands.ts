@@ -366,7 +366,10 @@ function handle(tx: Tx, c: Command): void {
       const d = requireDecision(s, "writeAAAction", (x) => x.aa === c.aa);
       const targets = [...new Set([...(d.target ? [d.target] : []), ...(c.action.targets ?? [])])];
       const action = actionFrom(s, `a${s.turn}-${c.aa}`, c.aa, { ...c.action, targets }, d.source);
-      if (d.source === "obligation") tx.emit({ type: "DealKept", deal: d.deal!, by: c.aa }, "engine");
+      // Acting on the obligation keeps the deal; record it unless a keep check already did.
+      if (d.source === "obligation" && s.current.aa[c.aa]?.deals[d.deal!]?.kept !== true) {
+        tx.emit({ type: "DealKept", deal: d.deal!, by: c.aa }, "engine");
+      }
       return tx.emit({ type: "ActionAccepted", action });
     }
 
