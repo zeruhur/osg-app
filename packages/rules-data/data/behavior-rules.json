@@ -1,0 +1,45 @@
+{
+  "source": {
+    "file": "solo_mode.qmd",
+    "heading": "Part IV: Autonomous Actors > Behavior Rules",
+    "table": 0
+  },
+  "rows": [
+    {
+      "face": 1,
+      "id": "consolidator",
+      "name": "Consolidator",
+      "rule": "Secures what it holds. Acts against another faction only if that faction threatened it in the last Report."
+    },
+    {
+      "face": 2,
+      "id": "aggressor",
+      "name": "Aggressor",
+      "rule": "Pushes toward its objective by the most direct means. Never holds two turns running."
+    },
+    {
+      "face": 3,
+      "id": "opportunist",
+      "name": "Opportunist",
+      "rule": "Targets the faction lowest on the Standing list."
+    },
+    {
+      "face": 4,
+      "id": "balancer",
+      "name": "Balancer",
+      "rule": "Targets the faction highest on the Standing list."
+    },
+    {
+      "face": 5,
+      "id": "reactor",
+      "name": "Reactor",
+      "rule": "Holds until acted upon. Then targets the faction that last affected it."
+    },
+    {
+      "face": 6,
+      "id": "schemer",
+      "name": "Schemer",
+      "rule": "Acts on odd turns, holds on even turns. Keeps deals only while they serve it."
+    }
+  ]
+}

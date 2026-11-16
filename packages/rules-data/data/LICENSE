@@ -1,0 +1,19 @@
+The JSON files in this directory (and its subdirectories) are adapted from
+
+  "Contested Ground: Solo Mode" 1.0, docs/solo_mode.qmd
+  © 2026 Roberto Bisceglie
+  https://github.com/openstrategygames/openstrategygames.github.io
+  at commit 0d96334f1216f71c024c875ec2427eda97ccd97f
+
+The Open Strategy Game format was defined by Chris McDowall, originating in the
+Matrix Game tradition established by Chris Engle and Tom Mouat.
+
+The original work is licensed under Creative Commons Attribution-ShareAlike 4.0
+International (CC BY-SA 4.0): https://creativecommons.org/licenses/by-sa/4.0/
+
+Changes: the tables and Appendix A scenario were converted to JSON, with the text
+kept verbatim (Markdown emphasis removed) and machine-readable fields added (ids,
+roll ranges, odds, leverage and behavior identifiers, effect tags, source
+references). These adapted files are licensed under CC BY-SA 4.0 as well.
+
+The code in this package (src/) is licensed MIT, like the rest of the repository.

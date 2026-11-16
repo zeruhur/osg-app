@@ -98,7 +98,9 @@ Zod schemas in `src/schemas.ts`, JSON in `data/`, typed loaders in `src/index.ts
 
 **Leverage type** is an open string, with the six standard ones as a suggested enum. Essaveth's secondary is `diplomatic`, and Solo Part IV allows "the scenario's own".
 
-**Scenario pack schema** (`ScenarioPack`): `id, title, problem, world, map[{id, name, notes, contested}], turnZero[], unsettled[], clock{length, escalations[{box, title, text}], breakingPoint: box}, variants[{id: "full" | "lighter", factions[], standing[], background[]}], factions[{id, name, public, asPlayer{shortTerm, longTerm, position[], bonus}, asAA{objective, position, leverage{primary, secondary}, behavior, bonus{name, uses}, actionTable[6], secretTable[6]}}], startingDisposition{[aaId]: {[playerId]: Disposition}}`.
+**Scenario pack schema** (`ScenarioPack`; `packages/rules-data/src/schemas.ts` is authoritative): `id, title, problem, world, map[{id, name, notes, contested}], turnZero[], unsettled[], clock{length, escalations[{box, title, text, breakingPoint}]}, variants[{id, turns, factions[], background[], standing[], recommended}], factions[{id, name, title, public, asPlayer{shortTerm, longTerm, position[], bonus{name, uses, text?}}, asAA{objective, position, leverage{primary, secondary?}, behavior, bonus?, actionTable[6], secretTable[6]}}], startingDisposition{[aaId]: {[playerFactionId]: Disposition}}`. Appendix A gives no explicit map connections (the location notes describe the routes), so the M0 schema has none.
+
+**How the JSON was made:** extracted once from `solo_mode.qmd` @ `0d96334` by a throwaway script (cells kept verbatim, with `**`/`*` emphasis and trailing `\` removed), then given machine fields. From now on, edit the JSON by hand; the drift test (section 6) catches divergence from upstream.
 
 **Licence (confirmed):** everything in `data/` is CC BY-SA 4.0 rules content; the code is MIT. Add `data/LICENSE` (CC BY-SA 4.0, with attribution to Open Strategy Games and the source file and commit) in the same commit as the first data file, and set the package's `license` field to `MIT AND CC-BY-SA-4.0`.
 
@@ -156,30 +158,23 @@ interface RollMeta { seed: string; position: number; faces: number[] }   // on e
 
 ### 4.3 Events
 
-Each event is `EventMeta & { type: ...; ... }`. A first pass for M0 (later milestones add `*Drafted` events):
+Each event is `EventMeta & { type: ...; ... }`. **As built, `packages/engine/src/events.ts` is authoritative.** Differences from the first plan:
 
-| Group | Events |
-| --- | --- |
-| Setup | `GameCreated{seed, packId, variant, playerFaction, turns}`, `ScenarioLoaded{scenario}`, `FactionAdded`, `StandingSet{order, reason?}`, `DispositionSet`, `ClockConfigured`, `FactEstablished{fact}`, `ThreadOpened` |
-| Turn | `TurnOpened{turn}`, `StepAdvanced{to}`, `TurnClosed` |
-| Oracle | `OracleAsked{id, question, odds, purpose}`, `OracleRolled{id, keep, kept, answer, roll: RollMeta}`, `OracleInterpreted{id, text}` |
-| Talk | `OfferMade{id, aa, gives, asks, fit: OfferFit}`, `OfferOddsComputed{id, odds, steps[]}`, `OfferResolved{id, result, condition?, counter?}`, `OfferWalkedAway{id}` |
-| Deals | `DealStruck{id, parties, terms, obligations[], since, until?}`, `DealKeepChecked{id, odds, oracleId}`, `DealBroken{id, by}`, `DealKept{id, by}` |
-| Actions | `ActionDeclared{id, faction, act, out, lev, bonus?, covert}`, `ActionLocked{id}`, `AAHeld{faction, reason}`, `AATableRolled{faction, index, entry, roll, veto: boolean}`, `TargetFilled{faction, target, rule}`, `ActionAccepted{id, faction, act, out, lev, bonus?, citedFacts[]}` |
-| Adjudicate | `ActionsClassified{groups[{class, actionIds[]}]}`, `LeverageGraded{actionId, grade, source: "player" \| "oracle"}`, `DiceRolled{actionId, grade, keep, roll, kept, doubles}`, `BonusSpent{faction, bonus, effect: "weak-to-strong" \| "4-5-to-6" \| "no-effect"}`, `ConflictResolved{groupId, prevailing[], standoff: boolean}`, `ResultBanded{actionId, band, effective}`, `InspirationRolled{table, actionId?, roll, entry}`, `ForceOfNatureUsed{actionId, roll, entry}` / `ForceOfNatureDeclined{actionId}`, `OutcomeAccepted{actionId, text, friction, newFacts[], crumbs[]}` |
-| Secrets | `SecretRolled{aa, roll, index, status: "private" \| "rumor" \| "public"}`, `SecretConfirmed{aa, index}` |
-| Signals | `SignalRolled{aa, roll, signal}`, `NoticeChecked{actionId, odds, oracleId}`, `CovertNoticed{actionId, by}` |
-| Update | `DispositionChanged{aa, from, to, causes[]}`, `TableEntryRewritten{aa, index, text}`, `ObjectiveChanged`, `BehaviorRerolled`, `ClockAdvanced{by, reason, to}`, `EscalationLanded{box}`, `FactionEliminated` |
-| Report | `ReportPublished{turn, header, paragraphs[], crumbs[], clockLine?, closing}` |
-| Meta | `DecisionAnswered{pointId, answer}` (the generic answer to any decision point) |
-
-`GameState` is the projection: `scenario, turn, step, factions{}, aa{}, standing[], dispositions{}, deals{}, facts{}, threads{}, actions{}, adjudications{}, clock, oracle{}, pending: DecisionPoint[], log meta (seed, nextSeq, rngPosition)`.
+- **`OracleConsulted`** is one event holding the odds, the purpose and the roll: the command sets the odds, the engine rolls in the same command, and nothing can change the odds afterwards. Its `purpose` links rule-driven questions (offer, deal keep, joint confirm, grade by Oracle, notice).
+- **`ActionDeclared` is the lock.** Declaring is committing (Part X, 3), so there is no separate `ActionLocked`.
+- **No generic `DecisionAnswered`.** Each decision point has its own command and domain event (`LeverageGraded`, `ConflictJudged`, `ConsolidatorThreatAnswered`, `ClockEffectAnswered`, ...), which keeps the log readable and typed.
+- Talk: `OfferMade` (with the computed odds and their steps), `OfferAnswered` (answer and follow-up), `OfferSettled`, `DealStruck`; deals: `DealKeepCostAnswered`, `DealKept`, `DealBroken`, `DealEnded`.
+- Step 5: `ActionsClassified` → `ConflictJudged` / `LeverageGraded` → (engine) `DiceRolled`, `BonusSpent`, `ResultBanded` (the band after conflict resolution, with the outcome: unopposed, rolled, as-rolled, prevails, worse, standoff) → `InspirationAnswered`/`InspirationRolled`/`InspirationApplied`, `ForceOfNatureAnswered`/`ForceOfNatureRolled`, `ClockEffectAnswered`/`ClockMoved`/`EscalationLanded`, `SecretRolled`/`SecretsResolved`/`InvestigationSixAnswered`/`FactRevealed` → `OutcomeAccepted` (with its new facts).
+- Classes are `unopposed | opposed | conflict`; a joint action is an action with several `participants`, classified like any other.
+- **Deferred to M1:** elimination and new powers (`FactionEliminated`), Oracle interpretation text (`OracleInterpreted`), Turn Zero Oracle questions during setup.
 
 `rngPosition` in the state is the position after the last roll event. Command handlers build `createRng(seed, state.rngPosition)`, so replaying commands is deterministic without storing Rng objects.
 
 ### 4.4 Decision points
 
-A typed union; while `state.pending` isn't empty, the turn can't advance.
+As built: `nextRequired(state)` in `turn.ts` returns `{ decisions, auto, canAdvance }`. **Decisions** are what only the player can give (judgment and writing); each is answered by its own command (`execute(state, command)` in `commands.ts`), which checks that a matching decision is open. **Automatic tasks** are what the engine does as soon as nothing blocks it: every roll the rules call for (table rolls, deal keep checks, joint confirmations, the group rolls, Signals, notice checks), filling a target the rules decide, holds, deal expiry, the end-of-turn Clock, closing the turn. `execute` runs them after each command, so a command returns every event up to the next decision. Optional player actions (`askOracle`, `makeOffer`, `vetoEntry`, `breakDeal`, `changeObjective`, `confirmSecret`) are allowed in their steps without being required.
+
+The decision kinds below are the planned ones; the built union is `Decision` in `turn.ts` (adds `declare`, `writeAAAction`, `writeOutcome`, `settleOffer`, `signalOffer`, `inspirationTarget`, `investigationSix`, `revealToAA`, `exposure`, `interested`, `report`, `startGame`, `openTurn`).
 
 | Kind | Where | What it asks | Engine contribution |
 | --- | --- | --- | --- |
@@ -200,8 +195,6 @@ A typed union; while `state.pending` isn't empty, the turn can't advance.
 | `dispositionCauses` | step 7 | per AA: kept deal / clear benefit / harm | applies deltas, once per cause, clamped |
 | `adaptation` | step 7 | which entry to rewrite, and the new text | trigger detection is engine-side |
 | `standing` | step 7 | the new order | applies list effects from inspiration first, as a proposal |
-
-`DecisionAnswered` carries the answer; the command handler validates it against the point's schema and emits the domain events.
 
 ### 4.5 Turn state machine (`turn.ts`)
 
@@ -284,7 +277,7 @@ Worked check (App. B): Meranto, neutral, advances objective → even +1 = **like
 ### 5.7 Deals (Solo V, Deals; Joint Actions with an AA)
 
 - `obligations[]` per party: `{kind: "act", description}` or `{kind: "refrain", description}`.
-- Step 4, per AA, in this order (Solo X.4): (1) an `act` obligation this turn → that is its action (no table). Keep check: a **Schemer** checks every turn it has an active deal (no `dealKeepCost` question); any other AA checks only if `dealKeepCost` says it costs something real. Odds from disposition: wary even, neutral likely, open likely, allied automatic (Schemer: likely), hostile n/a. On a no → `DealBroken{by: aa}`, and its action exploits the break (`targetChoice` with the deal partner suggested). (2) Hold rule. (3) Table roll; if a `refrain` obligation forbids the entry → reroll (this does **not** use the veto).
+- Step 4, per AA, in this order (Solo X.4): (1) an `act` obligation this turn → that is its action (no table). Keep check: a **Schemer** checks every turn it has an active deal (no `dealKeepCost` question); any other AA checks only if `dealKeepCost` says it costs something real. Odds from disposition: wary even, neutral likely, open likely, allied automatic (Schemer: likely), hostile unlikely (A9). On a no → `DealBroken{by: aa}`, and its action exploits the break (`targetChoice` with the deal partner suggested). (2) Hold rule. (3) Table roll; if a `refrain` obligation forbids the entry → reroll (this does **not** use the veto).
 - Player breaks a deal → −2 disposition (the step 7 cause is pre-checked).
 - Joint action with an AA: each turn, ask "Does [AA] confirm?" at likely (allied: automatic). On a no → the AA rolls its own table and the joint action's leverage is regraded.
 
@@ -304,7 +297,7 @@ Holding emits `AAHeld` and an unopposed consolidation action (the player writes 
 
 **Target fill (`[target]`):**
 1. Opportunist → the lowest on Standing; Balancer → the highest; Reactor → the faction that last affected it.
-2. Self-skip: if that is the AA itself, Opportunist takes the next one **up** from the bottom, Balancer the next one **down** from the top.
+2. Self-skip: if that is the AA itself, Opportunist takes the next one **up** from the bottom, Balancer the next one **down** from the top (A10).
 3. Otherwise → "most in the way of its objective" = `targetChoice` (judgment). Before asking: if the disposition is **hostile** → the player, automatically ("picks you whenever its rule allows a choice"). The tie-break among equal candidates is resolved by the answer itself: wary → the player is preferred; open → the player is excluded; allied → never targets the player unless the rule forces it (also applies to step 1).
 4. App. B check: Caldrath is an Aggressor and Hostile → target = Essaveth with no question. ✓
 
@@ -345,7 +338,7 @@ Holding emits `AAHeld` and an unopposed consolidation action (the player writes 
 - Read `rules/osg/docs/solo_mode.qmd` (skip with a clear message if the submodule is missing locally; **fail** in CI, using `process.env.CI`).
 - A tiny Markdown pipe-table parser: heading path → table rows (strip `**`, `*`, trailing `\`). Tables are found by their heading path, e.g. `Part VIII > Friction`, `Appendix A > The Kingdom of Caldrath` (2nd table after `As an AA`).
 - Compare the JSON prose with the cells, cell by cell, after normalizing whitespace and dashes. A mismatch message lists the heading, the row and both strings.
-- **Check:** copy the qmd to a temp dir, change one Friction cell, and point the parser at the copy → the test fails. Keep this as a meta-test.
+- **Check:** `drift(text)` is a pure function over the qmd text, so the meta-tests edit the text in memory (one Friction cell, an added row, a renamed heading, changed prose) and expect the matching mismatch. Built: `packages/rules-data/test/{qmd,drift,drift.test}.ts`.
 
 ---
 
@@ -413,3 +406,7 @@ None of these block the code: each is isolated behind a flag or a decision point
 - **A6. A bonus on Strong with a kept 6.** The rules only cover 4–5 and 1–3. Engine: no improvement, the bonus is spent. Does a player even have to spend it if it's declared? Yes, it's declared at step 3 and locked.
 - **A7. "Both outcomes can be true"** with 3+ colliding actions: the rules only define the either/or case for 3+. Engine: `bothCanBeTrue` is offered only for two-action conflicts.
 - **A8. Standing moves from the inspiration tables vs. the step 7 Standing revision.** App. B shows the move folded into the step 7 order. The engine treats inspiration moves as the default proposal for the `standing` point, not as a separate immediate change.
+- **A9. A Hostile AA's deal-keeping odds.** The Disposition table says "n/a" under Keeping deals for Hostile, but a Hostile AA can hold a deal: it accepts an Offer that serves its objective at Unlikely odds, or a deal partner's disposition drops to Hostile while the deal runs. Engine: Unlikely, one step below Wary (`keepOdds` in `rules/disposition.ts`). Upstream fix: give Hostile a value in the table.
+- **A10. Self-skip direction for Opportunist and Balancer.** Part IV: "If its rule points at itself, take the next faction down (Opportunist) or up (Balancer) the list." An Opportunist points at itself only when it is lowest, so there is nothing further down; read literally, the directions are inverted. Engine: the next faction in from that end (Opportunist: second lowest; Balancer: second highest). Upstream fix: "up (Opportunist) or down (Balancer)".
+- **A11. A bonus declared on an action that turns out unopposed.** The bonus rules (CG Part VII) cover Weak and Strong grades; an unopposed action is neither graded nor rolled. Engine: the bonus is not spent. Upstream fix: say so, or say it is spent.
+- **A12. One-off deal obligations.** Part V says an obligation to act "replaces the table", but not for how long. Appendix B's "delay Caldrath's next war-loan payment by a month" is a one-time act, yet the deal stays active. Engine: an obligation may name the `turn` it binds; without one it binds every turn the deal is active. Upstream fix: a line on obligations that are done once.

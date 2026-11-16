@@ -8,24 +8,28 @@ A referee's desk for freeform Open Strategy Games (OSG), solo first: the player 
 
 The design source of truth is `Freeform Strategy App Architecture and Stack (OSG Solo).md` (architecture, data model, LLM roles, stack, salvage table, M0 brief). The milestone plan is `docs/PLAN.md`. Read both before structural work.
 
-**Status:** pre-scaffold. No code or commits yet. Phase 1 (M0, the rules engine) is specified in `docs/phase-1-engine.md`: follow its work order (section 9), one commit per step. Its appendix lists rule ambiguities that are resolved by flags or decision points. Don't invent a third resolution.
+**Status:** Phase 1 (M0, the rules engine) is in progress on branch `m0/engine`, specified in `docs/phase-1-engine.md`. Follow its work order (section 9), one commit per step. Its appendix lists rule ambiguities that are resolved by flags or decision points. Don't invent a third resolution.
 
-## Commands (once M0 scaffold exists)
+## Commands
 
-pnpm workspace, TypeScript strict, Vitest.
+pnpm workspace (`pnpm@10.20.0` via `packageManager`), TypeScript ~5.8 strict, Vitest 5 with one project per package (root `vitest.config.ts`). Node ≥ 22 (CI runs 22).
 
 ```sh
-git submodule update --init          # rules/osg must be present; the drift and replay tests read it
+git submodule update --init          # rules/osg must be present; tests read it
 pnpm install
-pnpm -r test                         # all packages
-pnpm --filter @osg/engine test       # one package
-pnpm --filter @osg/engine exec vitest run src/resolution.test.ts   # one file
-pnpm --filter @osg/engine exec vitest run -t "bonus on Strong"     # one test by name
-pnpm -r exec tsc --noEmit            # typecheck (CI gate)
-pnpm --filter @osg/sim start -- --games 1000 --seed 42                 # Monte Carlo harness
+pnpm test                            # every project (root workspace tests + packages/* + apps/*)
+pnpm vitest run --project @osg/engine                        # one package
+pnpm vitest run packages/engine/src/rules/resolution.test.ts # one file
+pnpm vitest run -t "bonus on Strong"                         # one test by name
+pnpm typecheck                       # root tsc, then each package's own `typecheck` script (CI gate)
+pnpm sim --games 1000 --seed osg     # Monte Carlo harness (apps/sim); --help for options; ~0.08 s/game
 ```
 
-Update this section when the real scripts and package names land.
+On this Windows machine pnpm is not on PATH globally: use `corepack pnpm ...`. Scripts that call `pnpm` again (such as `typecheck`) need a `pnpm` shim on PATH, or `corepack enable`.
+
+The sim plays whole games through `execute` with a policy answering every decision (`apps/sim/src/policy.ts`); run it after engine changes: an engine bug shows up as a thrown error naming the game seed, turn, step and command. Its rates reflect that naive policy, not game balance.
+
+Each new package needs a `typecheck` script (`tsc --noEmit`), a `test` script, a tsconfig that extends `../../tsconfig.base.json`, and a `vitest.config.ts` whose project `name` is the package name.
 
 ## Rules source
 
@@ -38,9 +42,10 @@ Update this section when the real scripts and package names land.
 **The engine owns state and dice, the LLM proposes, the player confirms.**
 
 - **Event-sourced.** The game is an append-only event log. State is `fold(events)`; there is no other mutable game state. Every screen and every LLM context is a projection. Undo, replay, audit and Factionlog export all come from the log.
-- **`packages/engine` is pure:** no IO, no `Date.now()`, no `Math.random()`. All randomness goes through an injected `Rng` (from `packages/dice`), and every roll is an event that records its seed position.
+- **`packages/engine` is pure:** no IO, no `Date.now()`, no `Math.random()`. All randomness goes through an injected `Rng` (from `packages/dice`), and every roll is an event that records its seed position. The generator (sfc32 seeded by cyrb128) is pinned by an inline snapshot in `packages/dice/src/rng.test.ts`: changing it makes stored campaigns replay differently. In tests, script dice with `d6Script(...)` / `facesRng` from `@osg/dice/testing` (they throw on an unexpected extra roll), never with `vi.spyOn(Math, "random")`.
 - **Each rule function cites its source** in a comment, e.g. `// solo_mode.qmd Part V, Disposition`.
 - **Judgment is not decided in code.** Rules that need judgment (collision class/pairing, leverage grade, Consolidator "nothing to defend", veto "makes no sense", deal "costs something real", Force of Nature on doubles, optional 6/1 effects, Standing order, every draft acceptance) become **decision points**: the turn state machine stops in a typed pending state, the UI asks, the answer is an event.
+- **How a turn runs (`packages/engine`):** `nextRequired(state)` (`turn.ts`) returns the open `decisions`, the next `auto` task and `canAdvance`. `execute(state, command)` (`commands.ts`) checks the command against an open decision, emits its events, then runs automatic tasks (every roll the rules call for, holds, rule-filled targets, Clock, turn close) until the next decision. The reducer (`fold.ts`) only keeps books and checks structure; rule logic lives in `src/rules/*` (pure, value-in/value-out) and is called from commands. To add a rule: a `rules/` function + test, the event(s) in `events.ts`, a reducer case, the decision or auto task in `turn.ts`, and the handler in `commands.ts`. `test/appendix-b.ts` plays the book's worked turn through commands with its exact dice.
 - **Ordering is enforced by the state machine:** the player's action locks at step 3 before any AA action, roll or LLM output for the turn exists. In step 5, the classification and grades are stored as events *before* the engine rolls. A grade cannot change after its roll. The outcome text is drafted last.
 - **LLM output is always a draft.** Roles return typed objects (Zod-validated, then engine-checked: cited fact ids exist and are visible to that role, Strong grades carry three cited checklist answers). On a failure the engine retries once with the error text, then falls back to manual entry. Only `*Accepted` events change state; the LLM layer never writes events. The game must be fully playable with no LLM.
 - **The fact registry is the core.** Facts have visibility (public / private to a faction / player-only). The context builder filters by visibility *before* selecting by tag and recency, so a role can't see facts it shouldn't. The Referee role grades **blind**: factions relabeled A/B/C, actions shuffled, the player's faction hidden.

@@ -1,0 +1,57 @@
+{
+  "source": {
+    "file": "solo_mode.qmd",
+    "heading": "Part V: Disposition and Offers > Disposition",
+    "table": 0
+  },
+  "scale": [
+    "hostile",
+    "wary",
+    "neutral",
+    "open",
+    "allied"
+  ],
+  "rows": [
+    {
+      "id": "hostile",
+      "name": "Hostile",
+      "offers": "Refuses unless the deal serves its objective; then Unlikely",
+      "targeting": "Picks you whenever its rule allows a choice",
+      "keepingDeals": "n/a",
+      "keepOdds": "none"
+    },
+    {
+      "id": "wary",
+      "name": "Wary",
+      "offers": "One step worse",
+      "targeting": "Picks you between equal candidates",
+      "keepingDeals": "Even",
+      "keepOdds": "even"
+    },
+    {
+      "id": "neutral",
+      "name": "Neutral",
+      "offers": "No change",
+      "targeting": "No preference",
+      "keepingDeals": "Likely",
+      "keepOdds": "likely"
+    },
+    {
+      "id": "open",
+      "name": "Open",
+      "offers": "One step better",
+      "targeting": "Does not pick you between equal candidates",
+      "keepingDeals": "Likely",
+      "keepOdds": "likely"
+    },
+    {
+      "id": "allied",
+      "name": "Allied",
+      "offers": "One step better; accepts without rolling if the deal serves its objective",
+      "targeting": "Never targets you unless its rule forces it",
+      "keepingDeals": "Kept without a roll (Schemer: Likely)",
+      "keepOdds": "automatic",
+      "schemerKeepOdds": "likely"
+    }
+  ]
+}

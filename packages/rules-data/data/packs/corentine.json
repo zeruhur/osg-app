@@ -1,0 +1,415 @@
+{
+  "id": "corentine",
+  "title": "The Corentine Succession",
+  "source": {
+    "file": "solo_mode.qmd",
+    "heading": "Appendix A: The Corentine Succession (Solo)"
+  },
+  "problem": "The death of Arbiter Vethara has left the Corentine Peninsula without a recognized authority to renew the bilateral treaties that have kept its five polities at peace for thirty years.",
+  "world": "Five polities have coexisted under bilateral treaties ratified by the Arbiter, a title held for thirty years by Vethara of Corenth. The Arbiter held no army and claimed no territory; her authority rested on personal standing, the Conclave's ratification, and everyone's interest in having someone to call when things went wrong. She died twelve days ago and named no successor. The treaties have no renewal mechanism that all parties recognize.",
+  "map": [
+    {
+      "id": "corenth",
+      "name": "Corenth",
+      "notes": "The central city, seat of the old Arbiter, site of the Conclave's extraterritorial temple. Contested.",
+      "contested": true
+    },
+    {
+      "id": "northern-passes",
+      "name": "The Northern Passes",
+      "notes": "Essaveth's territory between Caldrath and Corenth. Caldrath's army is camped at their foot; Corenth is three days' march beyond them.",
+      "contested": false
+    },
+    {
+      "id": "caldrath",
+      "name": "Caldrath",
+      "notes": "The kingdom's heartland, to the north.",
+      "contested": false
+    },
+    {
+      "id": "saivorn",
+      "name": "Saivorn",
+      "notes": "The coastal republic to the south, with the peninsula's only two deep-water ports. Reaches Corenth by sea.",
+      "contested": false
+    },
+    {
+      "id": "southern-coast",
+      "name": "The Southern Coast",
+      "notes": "Merchant country with no single power; House Meranto's offices are here, but its leverage is everywhere.",
+      "contested": false
+    }
+  ],
+  "turnZero": [
+    "The treaties remain in force until they lapse unrenewed at the end of Turn 4 (the Crisis Clock's Breaking Point). Any faction may try to hasten or delay the lapse through action.",
+    "Caldrath's historical claim on Essaveth's northern province is dormant until Caldrath formally declares it.",
+    "The Conclave's extraterritorial status in Corenth derives from the treaties. If they lapse, it becomes contested.",
+    "Two mercenary companies operate on the peninsula. Both are expensive and in contact with more than one faction. Hiring one does not buy exclusivity."
+  ],
+  "unsettled": [
+    "whether Vethara died naturally",
+    "what the unpublished treaty clauses say"
+  ],
+  "clock": {
+    "length": 4,
+    "escalations": [
+      {
+        "box": 2,
+        "title": "Blood at the passes",
+        "text": "A Caldrath patrol and Essaveth's wardens clash at a gate tower; two men die. Each side names the other the aggressor.",
+        "breakingPoint": false
+      },
+      {
+        "box": 3,
+        "title": "Grain panic in Corenth",
+        "text": "Bread prices double in a week. The city guilds petition for \"a protector\", and do not say whose.",
+        "breakingPoint": false
+      },
+      {
+        "box": 4,
+        "title": "Breaking Point: the treaties lapse",
+        "text": "No renewal has been ratified. Every border, toll and debt guaranteed by the old order is now open to dispute, and the Conclave's temple is no longer clearly extraterritorial.",
+        "breakingPoint": true
+      }
+    ]
+  },
+  "variants": [
+    {
+      "id": "full",
+      "turns": 6,
+      "factions": [
+        "saivorn",
+        "caldrath",
+        "conclave",
+        "essaveth",
+        "meranto"
+      ],
+      "background": [],
+      "standing": [
+        "caldrath",
+        "meranto",
+        "saivorn",
+        "conclave",
+        "essaveth"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "lighter",
+      "turns": 6,
+      "factions": [
+        "essaveth",
+        "caldrath",
+        "meranto"
+      ],
+      "background": [
+        "saivorn",
+        "conclave"
+      ],
+      "standing": [
+        "caldrath",
+        "meranto",
+        "essaveth"
+      ],
+      "recommended": true
+    }
+  ],
+  "startingDisposition": {
+    "saivorn": {
+      "caldrath": "wary",
+      "conclave": "neutral",
+      "essaveth": "neutral",
+      "meranto": "neutral"
+    },
+    "caldrath": {
+      "saivorn": "wary",
+      "conclave": "neutral",
+      "essaveth": "hostile",
+      "meranto": "wary"
+    },
+    "conclave": {
+      "saivorn": "neutral",
+      "caldrath": "wary",
+      "essaveth": "open",
+      "meranto": "wary"
+    },
+    "essaveth": {
+      "saivorn": "open",
+      "caldrath": "hostile",
+      "conclave": "open",
+      "meranto": "neutral"
+    },
+    "meranto": {
+      "saivorn": "neutral",
+      "caldrath": "neutral",
+      "conclave": "neutral",
+      "essaveth": "neutral"
+    }
+  },
+  "factions": [
+    {
+      "id": "saivorn",
+      "name": "Saivorn",
+      "title": "The Republic of Saivorn",
+      "public": "the peninsula's dominant commercial power; controls both major ports.",
+      "asPlayer": {
+        "shortTerm": "Prevent any military action that closes the peninsula's sea lanes before a new framework is established.",
+        "longTerm": "Secure a successor treaty that guarantees commercial freedom of movement regardless of who holds political authority.",
+        "position": [
+          "You control the only two deep-water ports on the peninsula. Any faction that needs to move goods or troops by sea needs your cooperation or your tolerance.",
+          "You have no standing army. Hired companies and a small patrol fleet defend the harbours; they cannot project power inland.",
+          "The Arbiter's death is, privately, not unwelcome. Her last treaty imposed tariff concessions that cost you considerably. You want a new order, not the old one restored."
+        ],
+        "bonus": {
+          "name": "The Harbour Writ",
+          "uses": 1,
+          "text": "Open or close both ports to any cargo, at once and with full legal cover."
+        }
+      },
+      "asAA": {
+        "source": {
+          "file": "solo_mode.qmd",
+          "heading": "Appendix A: The Corentine Succession (Solo) > The Republic of Saivorn"
+        },
+        "objective": "Keep the sea lanes open and get commercial freedom written into whatever comes next",
+        "position": "Both deep-water ports; no army",
+        "leverage": {
+          "primary": "geographic",
+          "secondary": "economic"
+        },
+        "behavior": "opportunist",
+        "bonus": {
+          "name": "The Harbour Writ",
+          "uses": 1
+        },
+        "actionTable": [
+          "Draft a commercial-freedom charter and seek signatures for it",
+          "Escort merchant convoys to Corenth under the patrol fleet",
+          "Raise harbour dues on, or refuse berths to, [target]",
+          "Offer [target]'s suppliers or creditors better terms, to pry them loose",
+          "Hire a mercenary company to guard the harbours and the coast",
+          "Close both ports to all military cargo until a new framework is agreed"
+        ],
+        "secretTable": [
+          "A Saivorn merchant paid the Arbiter's physician in her last month",
+          "One of the two deep-water ports is silting up and will close within a year",
+          "The hired companies are owed three months' pay and are talking to Caldrath",
+          "Saivorn owes Meranto far more than its published credits show",
+          "Saivorn has been running arms to Essaveth in grain ships",
+          "The patrol fleet sails half-crewed"
+        ]
+      }
+    },
+    {
+      "id": "caldrath",
+      "name": "Caldrath",
+      "title": "The Kingdom of Caldrath",
+      "public": "the strongest military force on the peninsula; has wanted more for a long time.",
+      "asPlayer": {
+        "shortTerm": "Establish a military presence in Corenth before any other faction does.",
+        "longTerm": "Have the King of Caldrath recognized, by the Conclave or by sufficient consensus, as the new Arbiter or equivalent authority.",
+        "position": [
+          "You have the largest standing army on the peninsula, camped at the foot of the northern passes. Through the passes, Corenth is three days' march away. Everyone knows this.",
+          "Five years ago, Vethara publicly rebuked Caldrath over a border dispute with Essaveth and ruled against you. The rebuke is in the Conclave's registers. It will be used against you.",
+          "Your military expansion was financed largely by loans from House Meranto. The debt is significant and the terms are not favourable."
+        ],
+        "bonus": {
+          "name": "The Old Muster Rolls",
+          "uses": 1,
+          "text": "Call up the reserve levies: a second army, for one campaign."
+        }
+      },
+      "asAA": {
+        "source": {
+          "file": "solo_mode.qmd",
+          "heading": "Appendix A: The Corentine Succession (Solo) > The Kingdom of Caldrath"
+        },
+        "objective": "Put troops in Corenth first, then have the King recognized as Arbiter",
+        "position": "The largest army, at the foot of the passes; deep in debt to Meranto",
+        "leverage": {
+          "primary": "military",
+          "secondary": "geographic"
+        },
+        "behavior": "aggressor",
+        "bonus": {
+          "name": "The Old Muster Rolls",
+          "uses": 1
+        },
+        "actionTable": [
+          "March a column through the northern passes toward Corenth",
+          "Petition the Conclave to recognize the King as interim Arbiter",
+          "Demand right of passage from [target], backed by the army",
+          "Seize a depot, toll post or road held by [target]",
+          "Hire one of the two mercenary companies",
+          "Formally declare the claim on Essaveth's northern province"
+        ],
+        "secretTable": [
+          "The King is ill, and his heir opposes the campaign",
+          "The army's pay is three months in arrears",
+          "A Meranto agent sits on the King's war council",
+          "Part of the historical claim on Essaveth rests on a forged charter",
+          "The King has secretly offered Saivorn a share of Corenth's tolls",
+          "Caldrath's scouts have found a goat road around the passes"
+        ]
+      }
+    },
+    {
+      "id": "conclave",
+      "name": "The Conclave",
+      "title": "The Conclave",
+      "public": "the religious body that ratified all the Arbiter's treaties; holds the originals.",
+      "asPlayer": {
+        "shortTerm": "Be formally recognized as the body that must ratify any new treaty framework or successor arrangement before it takes effect.",
+        "longTerm": "Establish permanent Conclave oversight of whoever holds the Arbiter's role, however they are chosen.",
+        "position": [
+          "You hold the original copies of all bilateral treaties, including clauses never made public. What is written there, and what you choose to reveal or withhold, is leverage.",
+          "Your temple complex in Corenth is extraterritorial. No faction can move against you there without the political cost of attacking a sacred institution.",
+          "You have no military force and are substantially in debt to House Meranto for a building programme not yet complete."
+        ],
+        "bonus": {
+          "name": "The Sealed Archive",
+          "uses": 1,
+          "text": "Produce an original treaty document whose authenticity no one can credibly dispute."
+        }
+      },
+      "asAA": {
+        "source": {
+          "file": "solo_mode.qmd",
+          "heading": "Appendix A: The Corentine Succession (Solo) > The Conclave"
+        },
+        "objective": "Make Conclave ratification the price of any legitimate settlement",
+        "position": "The treaty originals and an extraterritorial temple; no army; in debt to Meranto",
+        "leverage": {
+          "primary": "legitimacy",
+          "secondary": "informational"
+        },
+        "behavior": "balancer",
+        "bonus": {
+          "name": "The Sealed Archive",
+          "uses": 1
+        },
+        "actionTable": [
+          "Proclaim from the temple that no settlement is valid without Conclave ratification",
+          "Convene a summit of all factions in Corenth, under the temple's protection",
+          "Publish an unpublished treaty clause that embarrasses [target]",
+          "Refuse to receive [target]'s envoys and denounce its conduct from the temple steps",
+          "Seek a moratorium on its building-programme debt",
+          "Name an interim Arbiter of its own choosing"
+        ],
+        "secretTable": [
+          "An unpublished clause grants Caldrath the northern province after thirty years, and the term has passed",
+          "Vethara named a successor in a sealed letter the Conclave is hiding",
+          "The Conclave is split: its Elder favors a settlement under Caldrath",
+          "Money borrowed for the building programme was diverted",
+          "The Conclave has privately promised ratification to two different factions",
+          "One of the original treaties was never signed"
+        ]
+      }
+    },
+    {
+      "id": "essaveth",
+      "name": "Essaveth",
+      "title": "The Principality of Essaveth",
+      "public": "a small border state whose existence was guaranteed by Vethara's last major treaty.",
+      "asPlayer": {
+        "shortTerm": "Secure a written guarantee of territorial integrity from at least two other factions before Caldrath's army moves.",
+        "longTerm": "Have Essaveth's borders explicitly named and protected in whatever successor treaty emerges.",
+        "position": [
+          "Your principality sits at the peninsula's crossroads. Caldrath's army cannot reach Corenth from the north without passing through or around your territory. This is your primary leverage and your primary vulnerability.",
+          "The Arbiter's last major treaty created your current borders. Without it, Caldrath has a historical claim on your northern province that predates Vethara's arbitration.",
+          "Your garrison is small but well positioned. You can hold your passes for weeks, not months. You need allies, and you need them before the army moves."
+        ],
+        "bonus": {
+          "name": "The Pass Wardens",
+          "uses": 2,
+          "text": "Essaveth's hereditary gate-keepers: men who know every ledge and sally port. Scope: any action fought or enforced in the passes."
+        }
+      },
+      "asAA": {
+        "source": {
+          "file": "solo_mode.qmd",
+          "heading": "Appendix A: The Corentine Succession (Solo) > The Principality of Essaveth"
+        },
+        "objective": "Get its borders guaranteed in writing, by as many factions as possible",
+        "position": "The northern passes, holdable for weeks; a dormant Caldrath claim on its northern province",
+        "leverage": {
+          "primary": "geographic",
+          "secondary": "diplomatic"
+        },
+        "behavior": "consolidator",
+        "bonus": {
+          "name": "The Pass Wardens",
+          "uses": 2
+        },
+        "actionTable": [
+          "Seek a written border guarantee from the faction most likely to give one",
+          "Petition the Conclave to register its borders in the treaty archive",
+          "Close the passes to [target]'s traffic",
+          "Expose [target]'s designs on Essaveth to the other factions",
+          "Fortify the passes and call up the reserves",
+          "Offer transit rights through the passes to whichever faction will guarantee its borders"
+        ],
+        "secretTable": [
+          "The Prince is secretly negotiating a personal title from Caldrath",
+          "The garrison's stores will last ten days, not weeks",
+          "The northern province would welcome Caldrath",
+          "Essaveth's new fortifications were built on Meranto credit it cannot repay",
+          "Essaveth knows of a goat road around the passes and has told no one",
+          "Vethara left the Prince a private letter of guarantee the Conclave never countersigned"
+        ]
+      }
+    },
+    {
+      "id": "meranto",
+      "name": "House Meranto",
+      "title": "House Meranto",
+      "public": "a banking consortium with significant debts owed by every other faction.",
+      "asPlayer": {
+        "shortTerm": "Restructure or call in debts from at least two factions to improve your position before a new political order is settled.",
+        "longTerm": "Have financial obligations explicitly protected, and the Meranto family's status as creditors formally recognised, in whatever treaty framework emerges.",
+        "position": [
+          "You hold substantial debt from Caldrath, significant trade credits from Saivorn, and the Conclave's building programme. Every other faction owes you something.",
+          "You have no army, no territory, and no political claim. You can trigger a debt crisis that would damage every faction at once, including yourself.",
+          "Your agents are present in every major city. You often know things before the people they concern."
+        ],
+        "bonus": {
+          "name": "The Debt Clause",
+          "uses": 2,
+          "text": "The emergency clause in Meranto's lending agreements: freeze a debtor's discretionary spending for thirty days."
+        }
+      },
+      "asAA": {
+        "source": {
+          "file": "solo_mode.qmd",
+          "heading": "Appendix A: The Corentine Succession (Solo) > House Meranto"
+        },
+        "objective": "Turn two factions' debts into leverage before the new order is settled",
+        "position": "Everyone's creditor; agents everywhere; no army or territory",
+        "leverage": {
+          "primary": "economic",
+          "secondary": "informational"
+        },
+        "behavior": "schemer",
+        "bonus": {
+          "name": "The Debt Clause",
+          "uses": 2
+        },
+        "actionTable": [
+          "Call in part of [target]'s debt, with a deadline",
+          "Offer [target] restructured terms in exchange for a concession",
+          "Buy up [target]'s outstanding paper from smaller creditors",
+          "Sell what its agents know about [target] to that faction's rival",
+          "Move its reserves beyond the peninsula's reach",
+          "Freeze all new credit to the peninsula until creditors are protected"
+        ],
+        "secretTable": [
+          "Meranto is overextended: if two debtors default, the House fails",
+          "Meranto financed both sides of the last border war",
+          "The head of the House was Vethara's confidant and holds her private papers",
+          "Meranto has already sold Caldrath's debt to a foreign power",
+          "A Meranto clerk has been feeding the Conclave false records",
+          "Meranto plans to buy the Southern Coast's charters outright once the treaties lapse"
+        ]
+      }
+    }
+  ]
+}

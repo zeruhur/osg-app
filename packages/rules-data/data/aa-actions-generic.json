@@ -1,0 +1,98 @@
+{
+  "military": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 4. Generic AA Action Tables",
+      "table": 0
+    },
+    "column": "Military",
+    "entries": [
+      "Move forces to take or hold the contested place",
+      "Show force to back its claim: a march, a review, a patrol",
+      "Demand concessions from [target] under threat of force",
+      "Strike [target]'s exposed asset: a depot, an escort, an outpost",
+      "Recruit, hire or resupply",
+      "Open hostilities against [target]"
+    ]
+  },
+  "economic": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 4. Generic AA Action Tables",
+      "table": 0
+    },
+    "column": "Economic",
+    "entries": [
+      "Buy what its objective needs: votes, land, loyalty",
+      "Fund a faction whose success serves its objective",
+      "Call in debts from, or raise prices on, [target]",
+      "Buy up or cut off [target]'s supplies or credit",
+      "Move its money to safety",
+      "Freeze credit or trade across the region"
+    ]
+  },
+  "geographic": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 4. Generic AA Action Tables",
+      "table": 0
+    },
+    "column": "Geographic",
+    "entries": [
+      "Assert control of its ground: tolls, permits, patrols",
+      "Grant passage to a faction that serves its objective",
+      "Close its route or territory to [target]",
+      "Raise the price of passage for [target]",
+      "Fortify, survey or settle its ground",
+      "Cut the route entirely until its terms are met"
+    ]
+  },
+  "informational": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 4. Generic AA Action Tables",
+      "table": 1
+    },
+    "column": "Informational",
+    "entries": [
+      "Spread its version of the crisis",
+      "Trade a secret to a faction that serves its objective",
+      "Investigate [target] (on a success, roll its Secret Table)",
+      "Leak something damaging about [target]",
+      "Plant agents, or protect its own sources",
+      "Publish a revelation that changes the crisis"
+    ]
+  },
+  "legitimacy": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 4. Generic AA Action Tables",
+      "table": 1
+    },
+    "column": "Legitimacy",
+    "entries": [
+      "Proclaim the rule by which the crisis must be settled",
+      "Recognize or endorse a faction that serves its objective",
+      "Withhold recognition from [target], and denounce it",
+      "Produce a precedent, document or ruling against [target]",
+      "Convene a council, summit or hearing",
+      "Name a successor, deliver a verdict, or cast someone out"
+    ]
+  },
+  "popular": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 4. Generic AA Action Tables",
+      "table": 1
+    },
+    "column": "Popular",
+    "entries": [
+      "Rally in the streets for its demand",
+      "Lend its numbers to a faction that serves its objective",
+      "Strike, boycott or picket [target]",
+      "Occupy or wreck [target]'s property",
+      "Organize: choose leaders, raise a fund, recruit",
+      "Rise: a general strike or open revolt"
+    ]
+  }
+}

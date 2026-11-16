@@ -1,0 +1,148 @@
+{
+  "especiallyGood": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Part VIII: Inspiration Tables > Something Especially Good (on a 6)",
+      "table": 0
+    },
+    "column": "The faction also...",
+    "rows": [
+      {
+        "face": 1,
+        "text": "Gains an unexpected ally: a third party offers support"
+      },
+      {
+        "face": 2,
+        "text": "Learns something: roll a Secret of a faction involved",
+        "effect": "roll-secret"
+      },
+      {
+        "face": 3,
+        "text": "Establishes a fact that will support its next action in the same area"
+      },
+      {
+        "face": 4,
+        "text": "Weakens a rival: move the opposing faction down one place in Standing",
+        "effect": "rival-down"
+      },
+      {
+        "face": 5,
+        "text": "Wins goodwill: one AA involved moves +1 disposition toward the actor",
+        "effect": "disposition-up"
+      },
+      {
+        "face": 6,
+        "text": "Eases the crisis locally: push the Crisis Clock back one box",
+        "effect": "clock-back"
+      }
+    ]
+  },
+  "especiallyBad": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Part VIII: Inspiration Tables > Something Especially Bad (on a 1)",
+      "table": 0
+    },
+    "column": "The faction also...",
+    "rows": [
+      {
+        "face": 1,
+        "text": "Is exposed: a covert action or a private fact becomes public",
+        "effect": "exposed"
+      },
+      {
+        "face": 2,
+        "text": "Provokes backlash: one AA involved moves −1 disposition toward the actor",
+        "effect": "disposition-down"
+      },
+      {
+        "face": 3,
+        "text": "Loses an asset: a bonus, a holding, or a relationship",
+        "effect": "lose-asset"
+      },
+      {
+        "face": 4,
+        "text": "Strengthens a rival: move the opposing faction up one place in Standing",
+        "effect": "rival-up"
+      },
+      {
+        "face": 5,
+        "text": "Overreaches: the attempt creates a new vulnerability; add it to the Position",
+        "effect": "add-vulnerability"
+      },
+      {
+        "face": 6,
+        "text": "Worsens the crisis: advance the Crisis Clock one box",
+        "effect": "clock-forward"
+      }
+    ]
+  },
+  "friction": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Part VIII: Inspiration Tables > Friction",
+      "table": 0
+    },
+    "column": "The outcome...",
+    "rows": [
+      {
+        "face": 1,
+        "text": "Was witnessed: name who saw it"
+      },
+      {
+        "face": 2,
+        "text": "Cost more than planned"
+      },
+      {
+        "face": 3,
+        "text": "Alarmed someone: the faction most affected now has a reason to act"
+      },
+      {
+        "face": 4,
+        "text": "Set a precedent others can invoke"
+      },
+      {
+        "face": 5,
+        "text": "Opened a door for someone else"
+      },
+      {
+        "face": 6,
+        "text": "Is incomplete: one piece remains, to be finished later"
+      }
+    ]
+  },
+  "forceOfNature": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Part VIII: Inspiration Tables > Force of Nature",
+      "table": 0
+    },
+    "column": "Source",
+    "rows": [
+      {
+        "face": 1,
+        "text": "Weather or terrain: a storm, a flood, a collapsed road"
+      },
+      {
+        "face": 2,
+        "text": "Disease, fire or disaster"
+      },
+      {
+        "face": 3,
+        "text": "Popular unrest: a crowd, a strike, a riot"
+      },
+      {
+        "face": 4,
+        "text": "An outside power takes an interest"
+      },
+      {
+        "face": 5,
+        "text": "An economic shock: a failed harvest, a collapsed price"
+      },
+      {
+        "face": 6,
+        "text": "The past returns: a dead person's letter, an old claim, a forgotten treaty"
+      }
+    ]
+  }
+}

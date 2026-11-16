@@ -1,0 +1,22 @@
+{
+  "name": "@osg/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "OSG Solo rules engine: events, the pure reducer, the turn state machine and the deterministic rules. No IO, no clock, no global randomness.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@osg/dice": "workspace:*",
+    "@osg/rules-data": "workspace:*"
+  },
+  "devDependencies": {
+    "fast-check": "^4.10.2"
+  }
+}

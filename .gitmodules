@@ -1,0 +1,3 @@
+[submodule "rules/osg"]
+	path = rules/osg
+	url = https://github.com/openstrategygames/openstrategygames.github.io
