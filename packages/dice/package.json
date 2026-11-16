@@ -1,0 +1,19 @@
+{
+  "name": "@osg/dice",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Seedable dice for OSG Solo: an injectable Rng, the 2d6/d66 helpers the engine uses, and the Lonelog dice-notation roller ported from Sybyl.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./testing": "./src/testing.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "fast-check": "^4.6.7"
+  }
+}
