@@ -86,6 +86,7 @@ Goal: play the Corentine scenario start to finish with no API key. This build st
 
 - `packages/factionlog`: a Factionlog 0.3 codec on Sybyl's Lonelog 1.7 parser (`@(A+B)`, `d: Strong 2d6kh1[5,3]=5 -> Success`, `[Fac:]`, `[Bon:Owner|...]`, `[Rival:]`, `[Deal:]`, `[Standing:]`, `[Clock:]`). Export from the event log; import 0.2 logs through Appendix A.
 - **Scenario Builder** role over the Appendix C d66 procedure, with the "Check it" step as a validator. Fully manual generation works without the LLM.
+- **Scenario editor** in the desktop app (it's in the architecture diagram's App UI box): edit or write a pack (briefs, tables, Clock, map, Standing, dispositions) against the `ScenarioPack` schema, with the same "Check it" validator; generated scenarios open in it.
 - Release pipeline: signed desktop builds.
 
 **Gate M4:** export then re-import a played game and get the same Standing, deals and Clock; a generated scenario passes the check and is playable.

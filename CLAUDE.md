@@ -51,6 +51,22 @@ Each new package needs a `typecheck` script (`tsc --noEmit`), a `test` script, a
 - **The fact registry is the core.** Facts have visibility (public / private to a faction / player-only). The context builder filters by visibility *before* selecting by tag and recency, so a role can't see facts it shouldn't. The Referee role grades **blind**: factions relabeled A/B/C, actions shuffled, the player's faction hidden.
 - **Same rules for every faction.** The player and the AAs use the same checklist, prompts and validators.
 
+## Architecture diagram → code
+
+The design doc's system diagram (an image the doc export drops) has these boxes; this is where each lives:
+
+| Box | Code | Milestone |
+| --- | --- | --- |
+| App UI (React in Tauri): 8 turn screens, fact and thread browser, log view, scenario editor | `apps/desktop` | M1 (scenario editor: M4) |
+| Turn controller: state machine, locks the action, gates each step | `packages/engine/src/turn.ts` + `commands.ts` (inside the engine package, not a separate layer) | M0 |
+| Rules engine (pure TS): reducer, seeded dice, tables; owns every roll | `packages/engine` (`fold.ts`, `rules/`), `packages/dice` | M0 |
+| Rules data: tables and scenario packs, Zod-checked | `packages/rules-data` | M0 |
+| Event store: one SQLite file per campaign; projections | `apps/desktop/src/store` (projections are `fold`, not stored) | M1 |
+| Exporters: Factionlog, closing frame, Report archive | Report archive and closing frame in the desktop app; Factionlog in `packages/factionlog` | M1 / M4 |
+| Context builder, Validator, LLM gateway, LLM providers | not built yet | M2 |
+
+Flow: the UI sends commands and acceptances to the turn controller; the controller asks the engine to roll and apply; events go to the store; the context builder reads filtered facts from the store and feeds the gateway; drafts pass the validator and come back to the UI for review. The LLM never rolls.
+
 ## Sibling repos (read-only salvage sources, cloned next to this repo)
 
 - `../sybyl-standalone/app/src/lib/`: `providers/` (Anthropic/OpenAI/Gemini/Ollama + `stream.ts`) → `packages/llm-providers` (add `generateObject()`); `toolkit/diceEngine.ts` → `packages/dice` (swap `Math.random` for `Rng`); `lonelog/` (Lonelog 1.7 parser, tag replay) → `packages/factionlog`; `keychain.ts`, `usage.ts`, `src-tauri/`, CI workflows, UI components, `App.css`. Do not port Sybyl's `App.tsx`, Mythic-style `oracleEngine.ts`, vault or snapshots.
