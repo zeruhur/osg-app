@@ -1,0 +1,44 @@
+{
+  "source": {
+    "file": "solo_mode.qmd",
+    "heading": "Part V: Disposition and Offers > Signals",
+    "table": 0
+  },
+  "rows": [
+    {
+      "min": 1,
+      "max": 2,
+      "id": "silence",
+      "name": "Silence",
+      "text": ""
+    },
+    {
+      "min": 3,
+      "max": 3,
+      "id": "warning",
+      "name": "Warning",
+      "text": "It warns you off something it cares about. Write the warning as a crumb in the Report."
+    },
+    {
+      "min": 4,
+      "max": 4,
+      "id": "offer",
+      "name": "Offer",
+      "text": "It proposes a deal, drawn from its objective. Answer at your next Offer step. Refusing an Open or Allied AA costs −1 disposition."
+    },
+    {
+      "min": 5,
+      "max": 5,
+      "id": "exposure",
+      "name": "Exposure",
+      "text": "It has overextended. Name the vulnerability in the Report."
+    },
+    {
+      "min": 6,
+      "max": 6,
+      "id": "windfall",
+      "name": "Windfall",
+      "text": "Its action this turn incidentally helps you. Write it as an unintended consequence."
+    }
+  ]
+}

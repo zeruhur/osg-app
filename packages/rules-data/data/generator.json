@@ -1,0 +1,894 @@
+{
+  "event": [
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 0
+      },
+      "category": "Death and succession",
+      "rows": [
+        {
+          "roll": 11,
+          "text": "The ruler dies with no named heir"
+        },
+        {
+          "roll": 12,
+          "text": "The founder dies, leaving a will that satisfies no one"
+        },
+        {
+          "roll": 13,
+          "text": "The heir is proved illegitimate"
+        },
+        {
+          "roll": 14,
+          "text": "Two heirs are proclaimed on the same day"
+        },
+        {
+          "roll": 15,
+          "text": "The ruler abdicates"
+        },
+        {
+          "roll": 16,
+          "text": "The guarantor of the peace is assassinated"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 0
+      },
+      "category": "Collapse and failure",
+      "rows": [
+        {
+          "roll": 21,
+          "text": "The largest bank defaults"
+        },
+        {
+          "roll": 22,
+          "text": "The treasury runs dry"
+        },
+        {
+          "roll": 23,
+          "text": "The army mutinies over pay"
+        },
+        {
+          "roll": 24,
+          "text": "The governing council deadlocks and dissolves"
+        },
+        {
+          "roll": 25,
+          "text": "The great work fails: the dam, the wall, the canal"
+        },
+        {
+          "roll": 26,
+          "text": "The protecting power withdraws"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 1
+      },
+      "category": "Discovery and arrival",
+      "rows": [
+        {
+          "roll": 31,
+          "text": "A rich resource is found under contested ground"
+        },
+        {
+          "roll": 32,
+          "text": "A new route opens that bypasses the old one"
+        },
+        {
+          "roll": 33,
+          "text": "A foreign envoy arrives with an offer for whoever can sign"
+        },
+        {
+          "roll": 34,
+          "text": "Refugees arrive in numbers no one can absorb"
+        },
+        {
+          "roll": 35,
+          "text": "A new technique makes an old monopoly worthless"
+        },
+        {
+          "roll": 36,
+          "text": "A lost claimant returns, with proof"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 1
+      },
+      "category": "Violence",
+      "rows": [
+        {
+          "roll": 41,
+          "text": "A massacre no faction admits to"
+        },
+        {
+          "roll": 42,
+          "text": "A coup half-succeeds in the capital"
+        },
+        {
+          "roll": 43,
+          "text": "A border skirmish kills someone who mattered"
+        },
+        {
+          "roll": 44,
+          "text": "Raiders take the main road"
+        },
+        {
+          "roll": 45,
+          "text": "A fortress changes hands overnight"
+        },
+        {
+          "roll": 46,
+          "text": "A ceasefire breaks, and both sides deny firing first"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 2
+      },
+      "category": "Disaster",
+      "rows": [
+        {
+          "roll": 51,
+          "text": "Plague"
+        },
+        {
+          "roll": 52,
+          "text": "The harvest fails"
+        },
+        {
+          "roll": 53,
+          "text": "A flood moves the river that marked the border"
+        },
+        {
+          "roll": 54,
+          "text": "Fire destroys the archive of deeds and treaties"
+        },
+        {
+          "roll": 55,
+          "text": "A storm wrecks the only port"
+        },
+        {
+          "roll": 56,
+          "text": "The water source begins to fail"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 2
+      },
+      "category": "Rupture",
+      "rows": [
+        {
+          "roll": 61,
+          "text": "A treaty expires and cannot be renewed as written"
+        },
+        {
+          "roll": 62,
+          "text": "A leaked document proves a long-standing lie"
+        },
+        {
+          "roll": 63,
+          "text": "The dominant faith splits over a doctrine"
+        },
+        {
+          "roll": 64,
+          "text": "A province declares independence"
+        },
+        {
+          "roll": 65,
+          "text": "An election result is disputed"
+        },
+        {
+          "roll": 66,
+          "text": "A charter or monopoly is revoked"
+        }
+      ]
+    }
+  ],
+  "absence": [
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 3
+      },
+      "category": "Authority",
+      "rows": [
+        {
+          "roll": 11,
+          "text": "A recognized ruler"
+        },
+        {
+          "roll": 12,
+          "text": "An arbiter every faction accepts"
+        },
+        {
+          "roll": 13,
+          "text": "A council that can still decide"
+        },
+        {
+          "roll": 14,
+          "text": "A single voice to speak for the region abroad"
+        },
+        {
+          "roll": 15,
+          "text": "A commander the army obeys"
+        },
+        {
+          "roll": 16,
+          "text": "Anyone entitled to summon the assembly"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 3
+      },
+      "category": "Law and record",
+      "rows": [
+        {
+          "roll": 21,
+          "text": "A court whose rulings bind"
+        },
+        {
+          "roll": 22,
+          "text": "An agreed record of who owns what"
+        },
+        {
+          "roll": 23,
+          "text": "A treaty that holds the borders"
+        },
+        {
+          "roll": 24,
+          "text": "A law that covers the new situation"
+        },
+        {
+          "roll": 25,
+          "text": "An accepted count of votes or claims"
+        },
+        {
+          "roll": 26,
+          "text": "A precedent everyone recognizes"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 4
+      },
+      "category": "Security",
+      "rows": [
+        {
+          "roll": 31,
+          "text": "A force that keeps the roads safe"
+        },
+        {
+          "roll": 32,
+          "text": "A ceasefire anyone trusts"
+        },
+        {
+          "roll": 33,
+          "text": "The protection of a greater power"
+        },
+        {
+          "roll": 34,
+          "text": "A garrison in the contested place"
+        },
+        {
+          "roll": 35,
+          "text": "Neutral ground where enemies can meet"
+        },
+        {
+          "roll": 36,
+          "text": "A common enemy to keep rivals in line"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 4
+      },
+      "category": "Wealth",
+      "rows": [
+        {
+          "roll": 41,
+          "text": "A currency everyone accepts"
+        },
+        {
+          "roll": 42,
+          "text": "Credit, for anyone"
+        },
+        {
+          "roll": 43,
+          "text": "A buyer for the region's main export"
+        },
+        {
+          "roll": 44,
+          "text": "The funds to pay what is owed"
+        },
+        {
+          "roll": 45,
+          "text": "An agreed share of the tolls and revenues"
+        },
+        {
+          "roll": 46,
+          "text": "A single market"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 5
+      },
+      "category": "Resources and routes",
+      "rows": [
+        {
+          "roll": 51,
+          "text": "Enough water or grain for everyone"
+        },
+        {
+          "roll": 52,
+          "text": "Safe passage through the only route"
+        },
+        {
+          "roll": 53,
+          "text": "An agreed claim on the new resource"
+        },
+        {
+          "roll": 54,
+          "text": "Control of the only port"
+        },
+        {
+          "roll": 55,
+          "text": "The supply everyone depends on"
+        },
+        {
+          "roll": 56,
+          "text": "Working infrastructure: the bridge, the canal, the line"
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 1. The Problem",
+        "table": 5
+      },
+      "category": "Belief and legitimacy",
+      "rows": [
+        {
+          "roll": 61,
+          "text": "An official faith"
+        },
+        {
+          "roll": 62,
+          "text": "A ruler blessed by tradition"
+        },
+        {
+          "roll": 63,
+          "text": "A story about the past that everyone believes"
+        },
+        {
+          "roll": 64,
+          "text": "The consent of the governed"
+        },
+        {
+          "roll": 65,
+          "text": "A symbol that confers the right to rule: a crown, a seal, a relic"
+        },
+        {
+          "roll": 66,
+          "text": "A founding promise that still holds"
+        }
+      ]
+    }
+  ],
+  "stake": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 1. The Problem",
+      "table": 6
+    },
+    "rows": [
+      {
+        "face": 1,
+        "text": "Open war breaks out"
+      },
+      {
+        "face": 2,
+        "text": "The old order lapses for good: the treaty, the charter, the mandate"
+      },
+      {
+        "face": 3,
+        "text": "An outside power steps in and imposes its own settlement"
+      },
+      {
+        "face": 4,
+        "text": "The contested resource runs out or is ruined"
+      },
+      {
+        "face": 5,
+        "text": "The people rise and take matters into their own hands"
+      },
+      {
+        "face": 6,
+        "text": "The region splits apart"
+      }
+    ]
+  },
+  "archetype": [
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 2. Factions",
+        "table": 0
+      },
+      "category": "Military",
+      "rows": [
+        {
+          "roll": 11,
+          "text": "A standing army under an ambitious commander"
+        },
+        {
+          "roll": 12,
+          "text": "A mercenary company"
+        },
+        {
+          "roll": 13,
+          "text": "A border garrison"
+        },
+        {
+          "roll": 14,
+          "text": "A fleet"
+        },
+        {
+          "roll": 15,
+          "text": "A militant religious order"
+        },
+        {
+          "roll": 16,
+          "text": "A warlord's household"
+        }
+      ],
+      "leverage": "military"
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 2. Factions",
+        "table": 0
+      },
+      "category": "Economic",
+      "rows": [
+        {
+          "roll": 21,
+          "text": "A banking house"
+        },
+        {
+          "roll": 22,
+          "text": "A merchant league"
+        },
+        {
+          "roll": 23,
+          "text": "A craft guild"
+        },
+        {
+          "roll": 24,
+          "text": "A chartered trading company"
+        },
+        {
+          "roll": 25,
+          "text": "A great landowning family"
+        },
+        {
+          "roll": 26,
+          "text": "A smuggling ring"
+        }
+      ],
+      "leverage": "economic"
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 2. Factions",
+        "table": 0
+      },
+      "category": "Geographic",
+      "rows": [
+        {
+          "roll": 31,
+          "text": "A small state holding the pass"
+        },
+        {
+          "roll": 32,
+          "text": "A port city"
+        },
+        {
+          "roll": 33,
+          "text": "A river toll lord"
+        },
+        {
+          "roll": 34,
+          "text": "A frontier settlement"
+        },
+        {
+          "roll": 35,
+          "text": "The holders of the mine or the well"
+        },
+        {
+          "roll": 36,
+          "text": "A fortress town at the crossroads"
+        }
+      ],
+      "leverage": "geographic"
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 2. Factions",
+        "table": 1
+      },
+      "category": "Informational",
+      "rows": [
+        {
+          "roll": 41,
+          "text": "A spy network"
+        },
+        {
+          "roll": 42,
+          "text": "A press or broadsheet"
+        },
+        {
+          "roll": 43,
+          "text": "A university or archive"
+        },
+        {
+          "roll": 44,
+          "text": "The courier service"
+        },
+        {
+          "roll": 45,
+          "text": "A diplomatic corps without a state"
+        },
+        {
+          "roll": 46,
+          "text": "A secret society"
+        }
+      ],
+      "leverage": "informational"
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 2. Factions",
+        "table": 1
+      },
+      "category": "Legitimacy",
+      "rows": [
+        {
+          "roll": 51,
+          "text": "A priesthood"
+        },
+        {
+          "roll": 52,
+          "text": "A high court"
+        },
+        {
+          "roll": 53,
+          "text": "A dynasty in exile"
+        },
+        {
+          "roll": 54,
+          "text": "An ancient assembly"
+        },
+        {
+          "roll": 55,
+          "text": "An electoral college"
+        },
+        {
+          "roll": 56,
+          "text": "The late ruler's household"
+        }
+      ],
+      "leverage": "legitimacy"
+    },
+    {
+      "source": {
+        "file": "solo_mode.qmd",
+        "heading": "Appendix C: Scenario Generator > 2. Factions",
+        "table": 1
+      },
+      "category": "Popular",
+      "rows": [
+        {
+          "roll": 61,
+          "text": "A workers' league"
+        },
+        {
+          "roll": 62,
+          "text": "A peasant movement"
+        },
+        {
+          "roll": 63,
+          "text": "A city crowd and its tribune"
+        },
+        {
+          "roll": 64,
+          "text": "A refugee community"
+        },
+        {
+          "roll": 65,
+          "text": "A reform movement"
+        },
+        {
+          "roll": 66,
+          "text": "A sect of the faithful"
+        }
+      ],
+      "leverage": "popular"
+    }
+  ],
+  "secondaryLeverage": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 2. Factions",
+      "paragraph": "Secondary leverage (d6)."
+    },
+    "rows": [
+      {
+        "face": 1,
+        "leverage": "military"
+      },
+      {
+        "face": 2,
+        "leverage": "economic"
+      },
+      {
+        "face": 3,
+        "leverage": "geographic"
+      },
+      {
+        "face": 4,
+        "leverage": "informational"
+      },
+      {
+        "face": 5,
+        "leverage": "legitimacy"
+      },
+      {
+        "face": 6,
+        "leverage": "popular"
+      }
+    ]
+  },
+  "stance": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 2. Factions",
+      "table": 2
+    },
+    "rows": [
+      {
+        "face": 1,
+        "id": "claimant",
+        "name": "Claimant",
+        "description": "wants to fill the absence",
+        "shortTerm": "Seize the seat of the absence, or be first to act as what is missing",
+        "longTerm": "Be recognized as what is missing",
+        "behavior": "aggressor"
+      },
+      {
+        "face": 2,
+        "id": "guardian",
+        "name": "Guardian",
+        "description": "wants the old order back, with itself at the center",
+        "shortTerm": "Be acknowledged as indispensable to any settlement",
+        "longTerm": "Restore what is missing under its own oversight",
+        "behavior": "balancer"
+      },
+      {
+        "face": 3,
+        "id": "threatened",
+        "name": "Threatened",
+        "description": "may not survive the change",
+        "shortTerm": "Win guarantees from two factions before the first Escalation",
+        "longTerm": "Have its survival written into the new order",
+        "behavior": "consolidator"
+      },
+      {
+        "face": 4,
+        "id": "opportunist",
+        "name": "Opportunist",
+        "description": "the change frees it",
+        "shortTerm": "Use the crisis to throw off its worst burden",
+        "longTerm": "Make the new order better for it than the old",
+        "behavior": "opportunist"
+      },
+      {
+        "face": 5,
+        "id": "creditor",
+        "name": "Creditor",
+        "description": "everyone owes it something",
+        "shortTerm": "Turn two factions' obligations into leverage before the order is settled",
+        "longTerm": "Have its claims protected in whatever comes next",
+        "behavior": "schemer"
+      },
+      {
+        "face": 6,
+        "id": "outsider",
+        "name": "Outsider",
+        "description": "was never part of the old order",
+        "shortTerm": "Win a seat where the settlement will be decided",
+        "longTerm": "Be part of the new order on equal terms",
+        "behavior": "reactor"
+      }
+    ]
+  },
+  "vulnerability": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 2. Factions",
+      "table": 3
+    },
+    "rows": [
+      {
+        "face": 1,
+        "text": "In debt to another faction"
+      },
+      {
+        "face": 2,
+        "text": "Divided at the top"
+      },
+      {
+        "face": 3,
+        "text": "On a deadline: its strength lasts weeks, not months"
+      },
+      {
+        "face": 4,
+        "text": "Compromised by a public past: a rebuke, a defeat, a scandal"
+      },
+      {
+        "face": 5,
+        "text": "Dependent on a route or supply another faction controls"
+      },
+      {
+        "face": 6,
+        "text": "Has no force of its own"
+      }
+    ]
+  },
+  "tie": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 2. Factions",
+      "table": 4
+    },
+    "column": "This faction...",
+    "rows": [
+      {
+        "face": 1,
+        "text": "Owes the other"
+      },
+      {
+        "face": 2,
+        "text": "Is owed by the other"
+      },
+      {
+        "face": 3,
+        "text": "Has an old grievance against the other"
+      },
+      {
+        "face": 4,
+        "text": "Has a secret understanding with the other"
+      },
+      {
+        "face": 5,
+        "text": "Wants the same thing as the other"
+      },
+      {
+        "face": 6,
+        "text": "Shares an enemy with the other"
+      }
+    ]
+  },
+  "escalation": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 5. The Crisis Clock",
+      "table": 0
+    },
+    "rows": [
+      {
+        "face": 1,
+        "name": "Blood",
+        "text": "the first deaths that can be blamed on someone"
+      },
+      {
+        "face": 2,
+        "name": "Shortage",
+        "text": "prices spike; something everyone needs runs short"
+      },
+      {
+        "face": 3,
+        "name": "Outside interest",
+        "text": "an envoy, a fleet or an army appears at the edge of the map"
+      },
+      {
+        "face": 4,
+        "name": "Defection",
+        "text": "someone important inside one faction changes sides"
+      },
+      {
+        "face": 5,
+        "name": "Public anger",
+        "text": "crowds gather and demand that someone act"
+      },
+      {
+        "face": 6,
+        "name": "Deadline",
+        "text": "a date is set after which something becomes final"
+      }
+    ]
+  },
+  "location": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Appendix C: Scenario Generator > 6. The Map",
+      "table": 0
+    },
+    "rows": [
+      {
+        "face": 1,
+        "text": "A crossing: a pass, a bridge, a ford"
+      },
+      {
+        "face": 2,
+        "text": "A harbour or station"
+      },
+      {
+        "face": 3,
+        "text": "A source: a mine, a well, rich fields"
+      },
+      {
+        "face": 4,
+        "text": "A stronghold"
+      },
+      {
+        "face": 5,
+        "text": "A market or exchange"
+      },
+      {
+        "face": 6,
+        "text": "A shrine, archive or court"
+      }
+    ]
+  }
+}

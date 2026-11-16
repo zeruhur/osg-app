@@ -98,7 +98,9 @@ Zod schemas in `src/schemas.ts`, JSON in `data/`, typed loaders in `src/index.ts
 
 **Leverage type** is an open string, with the six standard ones as a suggested enum. Essaveth's secondary is `diplomatic`, and Solo Part IV allows "the scenario's own".
 
-**Scenario pack schema** (`ScenarioPack`): `id, title, problem, world, map[{id, name, notes, contested}], turnZero[], unsettled[], clock{length, escalations[{box, title, text}], breakingPoint: box}, variants[{id: "full" | "lighter", factions[], standing[], background[]}], factions[{id, name, public, asPlayer{shortTerm, longTerm, position[], bonus}, asAA{objective, position, leverage{primary, secondary}, behavior, bonus{name, uses}, actionTable[6], secretTable[6]}}], startingDisposition{[aaId]: {[playerId]: Disposition}}`.
+**Scenario pack schema** (`ScenarioPack`; `packages/rules-data/src/schemas.ts` is authoritative): `id, title, problem, world, map[{id, name, notes, contested}], turnZero[], unsettled[], clock{length, escalations[{box, title, text, breakingPoint}]}, variants[{id, turns, factions[], background[], standing[], recommended}], factions[{id, name, title, public, asPlayer{shortTerm, longTerm, position[], bonus{name, uses, text?}}, asAA{objective, position, leverage{primary, secondary?}, behavior, bonus?, actionTable[6], secretTable[6]}}], startingDisposition{[aaId]: {[playerFactionId]: Disposition}}`. Appendix A gives no explicit map connections (the location notes describe the routes), so the M0 schema has none.
+
+**How the JSON was made:** extracted once from `solo_mode.qmd` @ `0d96334` by a throwaway script (cells kept verbatim, with `**`/`*` emphasis and trailing `\` removed), then given machine fields. From now on, edit the JSON by hand; the drift test (section 6) catches divergence from upstream.
 
 **Licence (confirmed):** everything in `data/` is CC BY-SA 4.0 rules content; the code is MIT. Add `data/LICENSE` (CC BY-SA 4.0, with attribution to Open Strategy Games and the source file and commit) in the same commit as the first data file, and set the package's `license` field to `MIT AND CC-BY-SA-4.0`.
 

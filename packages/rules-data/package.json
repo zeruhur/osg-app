@@ -1,0 +1,18 @@
+{
+  "name": "@osg/rules-data",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT AND CC-BY-SA-4.0",
+  "description": "Solo Mode tables and the Corentine scenario pack as validated JSON. Code is MIT; data/ is CC BY-SA 4.0 (see data/LICENSE).",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
+  }
+}

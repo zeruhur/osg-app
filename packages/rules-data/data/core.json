@@ -1,0 +1,135 @@
+{
+  "leverage": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Part II: The Core Rules in Brief",
+      "table": 0
+    },
+    "rows": [
+      {
+        "grade": "strong",
+        "keep": "high",
+        "text": "The higher die"
+      },
+      {
+        "grade": "weak",
+        "keep": "low",
+        "text": "The lower die"
+      }
+    ]
+  },
+  "results": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Part II: The Core Rules in Brief",
+      "table": 1
+    },
+    "rows": [
+      {
+        "min": 6,
+        "max": 6,
+        "id": "especially-good",
+        "label": "6",
+        "text": "Desired outcome occurs, and something especially good may also occur"
+      },
+      {
+        "min": 4,
+        "max": 5,
+        "id": "success",
+        "label": "4–5",
+        "text": "Desired outcome occurs"
+      },
+      {
+        "min": 2,
+        "max": 3,
+        "id": "worse",
+        "label": "2–3",
+        "text": "The action proceeds, but the outcome is worse than desired"
+      },
+      {
+        "min": 1,
+        "max": 1,
+        "id": "especially-bad",
+        "label": "1",
+        "text": "Outcome worse than desired, and something especially bad may also occur"
+      }
+    ]
+  },
+  "oracleOdds": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Part III: The Oracle > Asking",
+      "table": 0
+    },
+    "rows": [
+      {
+        "id": "likely",
+        "name": "Likely",
+        "roll": {
+          "dice": 2,
+          "keep": "high"
+        },
+        "rollText": "2d6, keep the higher",
+        "yes": "75%"
+      },
+      {
+        "id": "even",
+        "name": "Even",
+        "roll": {
+          "dice": 1
+        },
+        "rollText": "1d6",
+        "yes": "50%"
+      },
+      {
+        "id": "unlikely",
+        "name": "Unlikely",
+        "roll": {
+          "dice": 2,
+          "keep": "low"
+        },
+        "rollText": "2d6, keep the lower",
+        "yes": "25%"
+      }
+    ]
+  },
+  "oracleAnswers": {
+    "source": {
+      "file": "solo_mode.qmd",
+      "heading": "Part III: The Oracle > Asking",
+      "table": 1
+    },
+    "rows": [
+      {
+        "face": 6,
+        "id": "yes-and",
+        "text": "Yes, and..."
+      },
+      {
+        "face": 5,
+        "id": "yes",
+        "text": "Yes"
+      },
+      {
+        "face": 4,
+        "id": "yes-but",
+        "text": "Yes, but..."
+      },
+      {
+        "face": 3,
+        "id": "no-but",
+        "text": "No, but..."
+      },
+      {
+        "face": 2,
+        "id": "no",
+        "text": "No"
+      },
+      {
+        "face": 1,
+        "id": "no-and",
+        "text": "No, and..."
+      }
+    ]
+  }
+}

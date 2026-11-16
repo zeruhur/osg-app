@@ -1,0 +1,39 @@
+{
+  "source": {
+    "file": "solo_mode.qmd",
+    "heading": "Part V: Disposition and Offers > Making an Offer",
+    "table": 0
+  },
+  "rows": [
+    {
+      "id": "yes-and",
+      "answer": "Yes, and...",
+      "result": "Accepts, and adds something: information, extra help, or +1 disposition"
+    },
+    {
+      "id": "yes",
+      "answer": "Yes",
+      "result": "Accepts"
+    },
+    {
+      "id": "yes-but",
+      "answer": "Yes, but...",
+      "result": "Accepts on one added condition. Take it or walk away."
+    },
+    {
+      "id": "no-but",
+      "answer": "No, but...",
+      "result": "Refuses, but says what it would accept instead"
+    },
+    {
+      "id": "no",
+      "answer": "No",
+      "result": "Refuses"
+    },
+    {
+      "id": "no-and",
+      "answer": "No, and...",
+      "result": "Refuses and takes offense (−1 disposition), or leaks the offer to a rival (a crumb in the Report)"
+    }
+  ]
+}
