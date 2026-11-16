@@ -347,7 +347,7 @@ Holding emits `AAHeld` and an unopposed consolidation action (the player writes 
 - Read `rules/osg/docs/solo_mode.qmd` (skip with a clear message if the submodule is missing locally; **fail** in CI, using `process.env.CI`).
 - A tiny Markdown pipe-table parser: heading path → table rows (strip `**`, `*`, trailing `\`). Tables are found by their heading path, e.g. `Part VIII > Friction`, `Appendix A > The Kingdom of Caldrath` (2nd table after `As an AA`).
 - Compare the JSON prose with the cells, cell by cell, after normalizing whitespace and dashes. A mismatch message lists the heading, the row and both strings.
-- **Check:** copy the qmd to a temp dir, change one Friction cell, and point the parser at the copy → the test fails. Keep this as a meta-test.
+- **Check:** `drift(text)` is a pure function over the qmd text, so the meta-tests edit the text in memory (one Friction cell, an added row, a renamed heading, changed prose) and expect the matching mismatch. Built: `packages/rules-data/test/{qmd,drift,drift.test}.ts`.
 
 ---
 
