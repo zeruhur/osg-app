@@ -55,30 +55,34 @@ Goal: play the Corentine scenario start to finish with no API key. This build st
 
 **Gate M1:** a full Corentine game is played by hand in `tauri dev`; closing and reopening the app at any step restores the same state; undo works across a turn boundary.
 
+**M1 closed (2026-11-16)** with the store, reopening and undo checked in `tauri dev`. A full game by hand proved impractical for solo play, so the full-game check moves to the M2 gate.
+
 ---
 
-## M2: LLM transport and the first roles
+## M2: The assisted turn (every drafting role of the turn)
 
-- `packages/llm-providers`: extract Sybyl's `providers/*`, `stream.ts` and `usage.ts` with their tests. Add `generateObject(schema)`: Anthropic tool use, OpenAI `json_schema`, Gemini `responseSchema`, Ollama `format`. Settle the sharing decision with Sybyl first (see below).
+**Detailed spec: `docs/phase-3-llm.md`.** Playing M1 by hand (2026-11-16) showed that solo play needs every drafting role of the turn at once: the AA actions, the grades, the outcomes and the Report. So M2 takes the roles that were split between M2 and M3.
+
+- `packages/llm-providers`: extract Sybyl's `providers/*`, `stream.ts` and `usage.ts` with their tests; Anthropic on the official SDK. Add `generateObject(schema)`: Anthropic `output_config.format`, OpenAI `json_schema`, Gemini `responseSchema`, Ollama `format`.
 - Keychain: Sybyl's `keychain.ts` plus the Rust `keyring` commands, with a new service name.
-- `packages/prompts`: versioned Markdown templates. The prompt version is stored in provenance.
-- The LLM framework in the engine's host layer (not in `packages/engine`): context builder (visibility filter, then tags, then recency, inside a per-role token budget), schema validation, engine checks, one retry with the error text, then manual fallback. Provenance (role, prompt version, provider, model, input fact ids) is stored on each draft event.
-- First roles behind per-role toggles: **AA Player** (step 4 expansions), **Oracle Interpreter**, **Offer voice** (step 2).
-- Settings: per-role provider/model mapping.
+- Engine: drafts in the log (`recordDraft` / `DraftRecorded`, refused unless their decision is open; `DraftAccepted` before the accepting command's events); crumbs linked to their private truth.
+- `packages/llm`, the host layer (not in `packages/engine`): versioned prompt templates, rules sections read from the submodule, context builder (visibility filter, then tags, then recency, inside a per-role token budget), fact aliases, Referee relabeling, schema validation, engine checks, one retry with the error text, then manual fallback. Provenance (role, prompt version, provider, model, input fact ids, usage) on each draft.
+- Roles, each with a toggle: **AA Player** (step 4), **Referee** blind (step 5: classification, conflict judgment, grades with a three-item checklist and cited facts; "Dispute" asks the Oracle at Even), **Narrator** (one batch of outcomes after the dice, with friction, a hook, a RAT self-check, new facts and crumbs), **Reporter** (step 8), **Oracle Interpreter**, **Offer voice** (step 2).
+- Settings: per-role on/off, provider, model, effort. Default: Anthropic `claude-haiku-5-5` for every role.
 
-**Gate M2:** a game is played with these three roles on; with any role off, play falls back cleanly; a forced invalid output goes to retry and then manual entry; no role's prompt contains a fact it can't see (tested).
+**Gate M2:** a full Corentine game is played with every role on, the player only confirming or correcting drafts; with any role off, play falls back cleanly; a forced invalid output goes to retry and then manual entry; no role's prompt contains a fact it can't see, and the player's faction never appears in a Referee prompt (tested); at most 10 calls per turn with 3 AAs and no Offers or Oracle questions.
 
 ---
 
-## M3: Referee, Narrator, Reporter
+## M3: Quality and the remaining roles
 
-- **Referee** (blind): relabel factions, shuffle actions, classify collisions, grade with a three-item checklist and cited facts. "Dispute" asks the Oracle at Even.
-- **Narrator**: batched outcome drafts after the dice, with friction, a hook, a RAT self-check, new facts and crumbs (the private truth linked to its public crumb).
-- **Reporter**: a news-roundup Report draft, streamed into the editor.
-- Standing proposal (step 7) and Adaptation rewrites.
-- Debrief metrics: Strong-grade rate per faction (to catch style leak), draft acceptance and edit rates.
+- LLM suggestions for the judgment decision points (deal costs, Consolidator threat, Force of Nature, Inspiration, Clock effects), the player still clicking.
+- Standing proposal (step 7), Adaptation rewrites, Signal lines (step 6), the optional Take-stock brief (step 1).
+- Streaming drafts into the editors (CodeMirror 6).
+- Debrief metrics: Strong-grade rate per faction (to catch style leak), draft acceptance and edit rates, calls and tokens per turn; the optional neutral rewrite of all actions before grading if style leak shows.
+- Prompt tuning against the logs of real games; per-role model changes where Haiku's drafts are weak.
 
-**Gate M3:** blind-grading test (the player's faction id never appears in a Referee prompt); a citation to an unknown or invisible fact is rejected; a full LLM-assisted game stays within about 12 to 18 calls per turn with 3 AAs.
+**Gate M3:** the metrics show on a played game; a role that fails its acceptance target has a documented fix (prompt, model or effort); a full LLM-assisted game stays within about 12 to 18 calls per turn with 3 AAs.
 
 ---
 
@@ -86,6 +90,7 @@ Goal: play the Corentine scenario start to finish with no API key. This build st
 
 - `packages/factionlog`: a Factionlog 0.3 codec on Sybyl's Lonelog 1.7 parser (`@(A+B)`, `d: Strong 2d6kh1[5,3]=5 -> Success`, `[Fac:]`, `[Bon:Owner|...]`, `[Rival:]`, `[Deal:]`, `[Standing:]`, `[Clock:]`). Export from the event log; import 0.2 logs through Appendix A.
 - **Scenario Builder** role over the Appendix C d66 procedure, with the "Check it" step as a validator. Fully manual generation works without the LLM.
+- **Scenario editor** in the desktop app (it's in the architecture diagram's App UI box): edit or write a pack (briefs, tables, Clock, map, Standing, dispositions) against the `ScenarioPack` schema, with the same "Check it" validator; generated scenarios open in it.
 - Release pipeline: signed desktop builds.
 
 **Gate M4:** export then re-import a played game and get the same Standing, deals and Clock; a generated scenario passes the check and is playable.
@@ -96,18 +101,18 @@ Goal: play the Corentine scenario start to finish with no API key. This build st
 
 A Node or Bun server with Hono, a Postgres event store and the same engine package, with server-side visibility filtering and private submission. Out of scope until the solo release ships, unless the open decision below says otherwise.
 
+**Referee mode** (idea, 2026-11-16): the M1 hand-driven flow, used by a human Referee to record someone else's game: the same steps and forms, with the actions written by the players instead of drafted.
+
 ---
 
 ## Open decisions (from the architecture doc)
 
-**Settled (2026-11-16):** licence is MIT for the code and CC BY-SA 4.0 for the bundled rules data and scenario packs; package scope is `@osg/*`; the Schemer deal-check conflict was fixed upstream in `0d96334` (Appendix B now runs the check).
+**Settled (2026-11-16):** shared packages (`dice`, `llm-providers`, the Lonelog parser) stay workspace packages here and go to npm once their APIs settle, then Sybyl switches to them; LLM roles are on by default once a key is set, each with its own toggle; the default model is Anthropic `claude-haiku-5-5` for every role (Opus judged too expensive), changeable per role. Licence is MIT for the code and CC BY-SA 4.0 for the bundled rules data and scenario packs; package scope is `@osg/*`; the Schemer deal-check conflict was fixed upstream in `0d96334` (Appendix B now runs the check).
 
 | Decision | Needed by | Recommendation |
 | --- | --- | --- |
-| Share `dice` / `llm-providers` / Lonelog parser with Sybyl: npm or one workspace? | M2 (before Sybyl imports anything) | Proceed in M0 with workspace packages here; publish to npm once the APIs settle, then Sybyl switches to the published packages |
 | Desktop (Tauri) first vs web PWA first | M1 | Tauri; the engine is already portable |
 | Campaign file: SQLite vs JSONL | M1 | SQLite behind `CampaignStore` |
-| LLM on by default or opt-in per role | M2 | Opt-in per role until the M3 metrics exist |
 | Group play in 1.0? | After M4 | No |
 
 Also: the repo name (`umpire-standalone`, while the doc's layout calls the root `osg-app`).

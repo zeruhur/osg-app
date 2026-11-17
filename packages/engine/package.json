@@ -6,7 +6,8 @@
   "license": "MIT",
   "description": "OSG Solo rules engine: events, the pure reducer, the turn state machine and the deterministic rules. No IO, no clock, no global randomness.",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./fixtures": "./src/fixtures/appendix-b.ts"
   },
   "scripts": {
     "test": "vitest run",

@@ -4,7 +4,7 @@ import { EngineError } from "../src/errors";
 import { applyEvent, fold } from "../src/fold";
 import { nextRequired } from "../src/turn";
 import { MERANTO_DEAL, playAppendixBTurn1, APPENDIX_B_DICE } from "./appendix-b";
-import { Game, appendixBSetup } from "./helpers";
+import { Game, append, appendixBSetup, emptyTurn } from "./helpers";
 
 const code = (f: () => unknown) => {
   try {
@@ -222,5 +222,24 @@ describe("step 5 and 6 branches", () => {
     expect(g.state.aa.caldrath!.targetsPlayerNext).toBe(true);
     expect(g.log.filter((e) => e.type === "DispositionChanged").at(-1)).toMatchObject({ aa: "caldrath", causes: ["uncovered-covert"] });
     expect(g.log.find((e) => e.type === "OracleConsulted" && e.purpose.kind === "notice")).toMatchObject({ odds: "even" });
+  });
+});
+
+describe("the Debrief (Part XI)", () => {
+  const debrief = { closingFrame: { essaveth: "Still standing." }, objectives: "a", aaObjectives: "b", surprise: "c", design: "d" };
+
+  it("is refused before the game ends", () => {
+    const g = new Game(appendixBSetup());
+    expect(code(() => g.do({ type: "writeDebrief", debrief }))).toBe("out-of-order");
+  });
+
+  it("is stored after the game ends, and the latest version counts", () => {
+    let log = append(appendixBSetup(), [{ type: "GameStarted" }]);
+    for (let t = 1; t <= 6; t++) log = append(log, emptyTurn(t));
+    const g = new Game(append(log, [{ type: "GameEnded" }]));
+    g.do({ type: "writeDebrief", debrief });
+    g.do({ type: "writeDebrief", debrief: { ...debrief, surprise: "Turn 4" } });
+    expect(g.state.debrief).toEqual({ ...debrief, surprise: "Turn 4" });
+    expect(fold(g.log).debrief?.surprise).toBe("Turn 4");
   });
 });

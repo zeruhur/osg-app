@@ -8,7 +8,7 @@ A referee's desk for freeform Open Strategy Games (OSG), solo first: the player 
 
 The design source of truth is `Freeform Strategy App Architecture and Stack (OSG Solo).md` (architecture, data model, LLM roles, stack, salvage table, M0 brief). The milestone plan is `docs/PLAN.md`. Read both before structural work.
 
-**Status:** Phase 1 (M0, the rules engine) is in progress on branch `m0/engine`, specified in `docs/phase-1-engine.md`. Follow its work order (section 9), one commit per step. Its appendix lists rule ambiguities that are resolved by flags or decision points. Don't invent a third resolution.
+**Status:** M0 (the rules engine, `docs/phase-1-engine.md`) is merged. M1 (the desktop app played by hand, `docs/phase-2-desktop.md`) is on branch `m1/desktop`, one commit per work step. M2 (every drafting role of the turn, `docs/phase-3-llm.md`) is specified, not started; the default model is `claude-haiku-5-5`. The engine spec's appendix lists rule ambiguities (A2-A12) resolved by flags or decision points; don't invent a third resolution.
 
 ## Commands
 
@@ -23,6 +23,8 @@ pnpm vitest run packages/engine/src/rules/resolution.test.ts # one file
 pnpm vitest run -t "bonus on Strong"                         # one test by name
 pnpm typecheck                       # root tsc, then each package's own `typecheck` script (CI gate)
 pnpm sim --games 1000 --seed osg     # Monte Carlo harness (apps/sim); --help for options; ~0.08 s/game
+pnpm --filter @osg/desktop dev       # the app in a browser at http://localhost:1430 (IndexedDB store)
+cd apps/desktop && npx tauri dev     # the desktop window (SQLite store); the first Rust build takes ~8 min
 ```
 
 On this Windows machine pnpm is not on PATH globally: use `corepack pnpm ...`. Scripts that call `pnpm` again (such as `typecheck`) need a `pnpm` shim on PATH, or `corepack enable`.
@@ -50,6 +52,22 @@ Each new package needs a `typecheck` script (`tsc --noEmit`), a `test` script, a
 - **LLM output is always a draft.** Roles return typed objects (Zod-validated, then engine-checked: cited fact ids exist and are visible to that role, Strong grades carry three cited checklist answers). On a failure the engine retries once with the error text, then falls back to manual entry. Only `*Accepted` events change state; the LLM layer never writes events. The game must be fully playable with no LLM.
 - **The fact registry is the core.** Facts have visibility (public / private to a faction / player-only). The context builder filters by visibility *before* selecting by tag and recency, so a role can't see facts it shouldn't. The Referee role grades **blind**: factions relabeled A/B/C, actions shuffled, the player's faction hidden.
 - **Same rules for every faction.** The player and the AAs use the same checklist, prompts and validators.
+
+## Architecture diagram → code
+
+The design doc's system diagram (an image the doc export drops) has these boxes; this is where each lives:
+
+| Box | Code | Milestone |
+| --- | --- | --- |
+| App UI (React in Tauri): 8 turn screens, fact and thread browser, log view, scenario editor | `apps/desktop` | M1 (scenario editor: M4) |
+| Turn controller: state machine, locks the action, gates each step | `packages/engine/src/turn.ts` + `commands.ts` (inside the engine package, not a separate layer) | M0 |
+| Rules engine (pure TS): reducer, seeded dice, tables; owns every roll | `packages/engine` (`fold.ts`, `rules/`), `packages/dice` | M0 |
+| Rules data: tables and scenario packs, Zod-checked | `packages/rules-data` | M0 |
+| Event store: one SQLite file per campaign; projections | `apps/desktop/src/store` (projections are `fold`, not stored) | M1 |
+| Exporters: Factionlog, closing frame, Report archive | Report archive and closing frame in the desktop app; Factionlog in `packages/factionlog` | M1 / M4 |
+| Context builder, Validator, LLM gateway, LLM providers | not built yet | M2 |
+
+Flow: the UI sends commands and acceptances to the turn controller; the controller asks the engine to roll and apply; events go to the store; the context builder reads filtered facts from the store and feeds the gateway; drafts pass the validator and come back to the UI for review. The LLM never rolls.
 
 ## Sibling repos (read-only salvage sources, cloned next to this repo)
 
